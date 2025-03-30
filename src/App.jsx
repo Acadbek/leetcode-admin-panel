@@ -10,7 +10,7 @@ import NotFound from './_root/pages/not-found'
 
 const App = () => {
   return (
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Routes>
 
         <Route element={<RootLayout />}>
