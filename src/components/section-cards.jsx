@@ -14,9 +14,9 @@ export function SectionCards() {
     <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 sm:grid-cols-2 xl:grid-cols-4">
       <Card className="shadow-xs bg-gradient-to-t from-primary bg-opacity-5 to-card dark:bg-card">
         <CardHeader className="relative">
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Maktablar</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums sm:text-3xl">
-            $1,250.00
+            1,250
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -36,7 +36,7 @@ export function SectionCards() {
       </Card>
       <Card className="shadow-xs bg-gradient-to-t from-primary bg-opacity-5 to-card dark:bg-card">
         <CardHeader className="relative">
-          <CardDescription>New Customers</CardDescription>
+          <CardDescription>Foydalanuvchilar</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums sm:text-3xl">
             1,234
           </CardTitle>
@@ -58,7 +58,7 @@ export function SectionCards() {
       </Card>
       <Card className="shadow-xs bg-gradient-to-t from-primary bg-opacity-5 to-card dark:bg-card">
         <CardHeader className="relative">
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>Yechilgan masalalar</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums sm:text-3xl">
             45,678
           </CardTitle>
@@ -78,7 +78,7 @@ export function SectionCards() {
       </Card>
       <Card className="shadow-xs bg-gradient-to-t from-primary bg-opacity-5 to-card dark:bg-card">
         <CardHeader className="relative">
-          <CardDescription>Growth Rate</CardDescription>
+          <CardDescription>Musobaqalar</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums sm:text-3xl">
             4.5%
           </CardTitle>

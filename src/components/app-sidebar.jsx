@@ -1,14 +1,21 @@
 import * as React from "react"
 import {
+  AlignVerticalJustifyStartIcon,
   ArrowUpCircleIcon,
   BarChartIcon,
   CameraIcon,
+  ChartNoAxesCombined,
+  Code,
+  FileCode2Icon,
   FileCodeIcon,
   FileTextIcon,
   FolderIcon,
   HelpCircleIcon,
   LayoutDashboardIcon,
   ListIcon,
+  MessageCircleQuestion,
+  PartyPopper,
+  Rss,
   SearchIcon,
   SettingsIcon,
   UsersIcon,
@@ -40,24 +47,34 @@ const data = {
       icon: LayoutDashboardIcon,
     },
     {
-      title: "About",
-      url: "/about",
+      title: "Foydalanuvchilar",
+      url: "/users",
       icon: ListIcon,
     },
     {
-      title: "Analytics",
+      title: "Masalalar",
+      url: "/problems",
+      icon: Code,
+    },
+    {
+      title: "Musobaqalar",
+      url: "/contests",
+      icon: PartyPopper,
+    },
+    {
+      title: "Yordam va Shikoyatlar",
+      url: "/help",
+      icon: MessageCircleQuestion,
+    },
+    {
+      title: "Blog / Yangiliklar",
+      url: "/blog",
+      icon: Rss,
+    },
+    {
+      title: "Analitika",
       url: "/analytics",
-      icon: BarChartIcon,
-    },
-    {
-      title: "Projects",
-      url: "/projects",
-      icon: FolderIcon,
-    },
-    {
-      title: "Team",
-      url: "/team",
-      icon: UsersIcon,
+      icon: ChartNoAxesCombined,
     },
   ],
   navClouds: [
@@ -110,20 +127,21 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Settings",
+      title: "Sozlamalar",
       url: "/settings",
       icon: SettingsIcon,
     },
     {
-      title: "Get Help",
+      title: "Yordam",
       url: "/get-help",
       icon: HelpCircleIcon,
     },
     {
-      title: "Search",
+      title: "Qidirish",
       url: "/search",
       icon: SearchIcon,
     },
+
   ],
 
 }

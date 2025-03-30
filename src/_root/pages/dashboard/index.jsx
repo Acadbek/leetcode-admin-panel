@@ -4,7 +4,7 @@ import { SectionCards } from '@/components/section-cards'
 import React from 'react'
 import data from '../../data.json'
 
-const HomePage = () => {
+const DashboardPage = () => {
   return (
     <div className='flex flex-col gap-5'>
       <SectionCards />
@@ -16,4 +16,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default DashboardPage

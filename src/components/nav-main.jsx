@@ -12,16 +12,16 @@ export function NavMain({
 }) {
   return (
     (<SidebarGroup>
-      <SidebarGroupContent className="flex flex-col gap-2">
-        <SidebarMenu>
+      <SidebarGroupContent className="flex flex-col">
+        <SidebarMenu className="flex flex-col gap-3">
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                <Link to={item.url} className="flex items-center gap-2 w-full">
-                  {item.icon && <item.icon />}
+              <Link to={item.url} className="flex items-center gap-2 w-full">
+                <SidebarMenuButton tooltip={item.title}>
+                  {item.icon && <item.icon className="size-5" />}
                   <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
