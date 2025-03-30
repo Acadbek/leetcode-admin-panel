@@ -37,8 +37,8 @@ import {
 const data = {
   user: {
     name: "Asadbek",
-    email: "m@example.com",
-    avatar: "/avatars/img.jpg",
+    email: "a@example.com",
+    avatar: "https://avatars.githubusercontent.com/u/87940040?v=4",
   },
   navMain: [
     {
