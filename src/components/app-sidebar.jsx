@@ -1,15 +1,11 @@
 import * as React from "react"
 import {
-  AlignVerticalJustifyStartIcon,
   ArrowUpCircleIcon,
-  BarChartIcon,
   CameraIcon,
   ChartNoAxesCombined,
   Code,
-  FileCode2Icon,
   FileCodeIcon,
   FileTextIcon,
-  FolderIcon,
   HelpCircleIcon,
   LayoutDashboardIcon,
   ListIcon,
@@ -18,7 +14,6 @@ import {
   Rss,
   SearchIcon,
   SettingsIcon,
-  UsersIcon,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
