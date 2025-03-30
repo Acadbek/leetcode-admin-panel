@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react"
 
 import {
@@ -13,12 +14,12 @@ export function NavSecondary({
   ...props
 }) {
   return (
-    <SidebarGroup {...props}>
+    (<SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="sm">
+              <SidebarMenuButton asChild>
                 <a href={item.url}>
                   <item.icon />
                   <span>{item.title}</span>
@@ -28,6 +29,6 @@ export function NavSecondary({
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
-    </SidebarGroup>
+    </SidebarGroup>)
   );
 }

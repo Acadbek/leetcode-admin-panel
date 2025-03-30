@@ -1,21 +1,22 @@
-import * as React from "react";
+import * as React from "react"
 import {
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+  ArrowUpCircleIcon,
+  BarChartIcon,
+  CameraIcon,
+  FileCodeIcon,
+  FileTextIcon,
+  FolderIcon,
+  HelpCircleIcon,
+  LayoutDashboardIcon,
+  ListIcon,
+  SearchIcon,
+  SettingsIcon,
+  UsersIcon,
+} from "lucide-react"
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavMain } from "@/components/nav-main"
+import { NavSecondary } from "@/components/nav-secondary"
+import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -24,69 +25,121 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar"
 
 const data = {
   user: {
-    name: "asad",
+    name: "Asadbek",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/avatars/img.jpg",
   },
   navMain: [
     {
-      title: "Users",
-      url: "/users",
-      icon: SquareTerminal,
+      title: "Dashboard",
+      url: "/",
+      icon: LayoutDashboardIcon,
+    },
+    {
+      title: "About",
+      url: "/about",
+      icon: ListIcon,
+    },
+    {
+      title: "Analytics",
+      url: "/analytics",
+      icon: BarChartIcon,
+    },
+    {
+      title: "Projects",
+      url: "/projects",
+      icon: FolderIcon,
+    },
+    {
+      title: "Team",
+      url: "/team",
+      icon: UsersIcon,
+    },
+  ],
+  navClouds: [
+    {
+      title: "Capture",
+      icon: CameraIcon,
       isActive: true,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
     },
     {
-      title: "Models",
-      url: "/models",
-      icon: Bot,
+      title: "Proposal",
+      icon: FileTextIcon,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
     },
     {
-      title: "Documentation",
-      url: "/documentation",
-      icon: BookOpen,
-    },
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings2,
+      title: "Prompts",
+      icon: FileCodeIcon,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
     },
   ],
   navSecondary: [
     {
-      title: "Support",
-      url: "/support",
-      icon: LifeBuoy,
+      title: "Settings",
+      url: "/settings",
+      icon: SettingsIcon,
     },
     {
-      title: "Feedback",
-      url: "/feedback",
-      icon: Send,
+      title: "Get Help",
+      url: "/get-help",
+      icon: HelpCircleIcon,
+    },
+    {
+      title: "Search",
+      url: "/search",
+      icon: SearchIcon,
     },
   ],
-};
 
-export function AppSidebar({ ...props }) {
+}
+
+export function AppSidebar({
+  ...props
+}) {
   return (
-    <Sidebar
-      className="top-[--header-height] !h-[calc(100svh-var(--header-height))]"
-      {...props}
-    >
+    (<Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5">
               <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Company name</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
+                <ArrowUpCircleIcon className="h-5 w-5" />
+                <span className="text-base font-semibold">LOGO</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -99,6 +152,6 @@ export function AppSidebar({ ...props }) {
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
-    </Sidebar>
+    </Sidebar>)
   );
 }
