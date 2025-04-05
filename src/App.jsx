@@ -5,6 +5,7 @@ import RootLayout from './_root/RootLayout'
 import AuthLayout from './_auth/AuthLayout'
 import Login from './_auth/forms/Login'
 import NotFound from './_root/pages/not-found'
+import Problems from './_root/pages/problems'
 
 // import with lazy loading
 const DashboardPage = React.lazy(() => import('./_root/pages/dashboard'))
@@ -19,6 +20,7 @@ const App = () => {
         <Route element={<RootLayout />}>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path='/problems' element={<Problems />} />
         </Route>
 
         {/* Public Routes */}

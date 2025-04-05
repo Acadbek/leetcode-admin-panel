@@ -1,4 +1,5 @@
 import { ModeToggle } from "./mode-toggle";
+import { Separator } from "./ui/separator";
 import { SidebarTrigger } from "./ui/sidebar";
 
 export function SiteHeader() {
@@ -16,4 +17,4 @@ export function SiteHeader() {
       </div>
     </header>)
   );
-}
+} 
