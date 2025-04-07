@@ -4,24 +4,33 @@ import { SectionCards } from '@/components/section-cards'
 import React from 'react'
 import data from '@/components/table/tasks'
 import { Button } from '@/components/ui/button'
-import { CheckCircle2Icon, GripVerticalIcon, LoaderIcon, MoreVerticalIcon, TrendingUpIcon } from 'lucide-react'
-import { Checkbox } from '@/components/ui/checkbox'
+import { GripVerticalIcon } from 'lucide-react'
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { toast } from "sonner"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useSortable } from '@dnd-kit/sortable'
 import { DataTable2 } from '@/components/table/data-table2'
 import { columns } from '@/components/table/columns'
-import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
-import { priorities } from '@/components/table/data'
+import { TrendingUp } from "lucide-react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+const problemData = [
+  { level: "Oson", Soni: 186, fill: "#21C55E" },
+  { level: "O'rta daraja", Soni: 305, fill: "#E9B309" },
+  { level: "Qiyin", Soni: 237, fill: "#EE4444" },
+]
 
 const chartData = [
   { month: "Yanvar", desktop: 186, mobile: 80 },
@@ -411,6 +420,10 @@ function TableCellViewer({
 //   },
 // ]
 
+const problemChartConfig = {
+
+}
+
 
 const DashboardPage = () => {
   return (
@@ -418,6 +431,66 @@ const DashboardPage = () => {
       <SectionCards />
       <div className="px-4 lg:px-6">
         <ChartAreaInteractive />
+      </div>
+      <div className='grid grid-cols-3 gap-4 px-4 lg:px-6'>
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-muted-foreground'>Barcha masalalar soni <span className="ml-1 font-bold text-foreground">{problemData.reduce((acc, item) => acc + item.Soni, 0)}</span></CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={problemChartConfig}>
+              <BarChart accessibilityLayer data={problemData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="level"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar dataKey="Soni" radius={8} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="leading-none text-muted-foreground">
+              Showing total visitors for the last 6 months
+            </div>
+          </CardFooter>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-muted-foreground'>Barcha masalalar soni <span className="ml-1 font-bold text-foreground">{problemData.reduce((acc, item) => acc + item.Soni, 0)}</span></CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={problemChartConfig}>
+              <BarChart accessibilityLayer data={problemData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="level"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar dataKey="Soni" radius={8} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="leading-none text-muted-foreground">
+              Showing total visitors for the last 6 months
+            </div>
+          </CardFooter>
+        </Card>
       </div>
       <DataTable2 columns={columns} data={data} />
     </div>

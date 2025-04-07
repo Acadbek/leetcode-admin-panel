@@ -1,0 +1,26 @@
+[
+  {
+    "name": "John Doe",
+    "school": "MIT",
+    "email": "john.doe@example.com",
+    "role": "admin",
+    "status": "active",
+    "additional": "12.07.2023 da ro'yxatdan o'tgan"
+  },
+  {
+    "name": "John Doe",
+    "school": "MIT",
+    "email": "john.doe@example.com",
+    "role": "admin",
+    "status": "active",
+    "additional": "12.07.2023 da ro'yxatdan o'tgan"
+  },
+  {
+    "name": "John Doe",
+    "school": "MIT",
+    "email": "john.doe@example.com",
+    "role": "admin",
+    "status": "active",
+    "additional": "12.07.2023 da ro'yxatdan o'tgan"
+  }
+]

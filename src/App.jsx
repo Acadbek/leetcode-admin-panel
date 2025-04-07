@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { ThemeProvider } from './components/theme-provider'
 import { Route, Routes } from 'react-router-dom'
 import RootLayout from './_root/RootLayout'
@@ -6,6 +6,7 @@ import AuthLayout from './_auth/AuthLayout'
 import Login from './_auth/forms/Login'
 import NotFound from './_root/pages/not-found'
 import Problems from './_root/pages/problems'
+import UsersPage from './_root/pages/users'
 
 // import with lazy loading
 const DashboardPage = React.lazy(() => import('./_root/pages/dashboard'))
@@ -18,9 +19,18 @@ const App = () => {
       {/* Private Routes */}
       <Routes>
         <Route element={<RootLayout />}>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route index path="/" element={
+            <Suspense fallback={<h1>Loading...</h1>}>
+              <DashboardPage />
+            </Suspense>
+          } />
+          <Route path="/about" element={
+            <Suspense fallback={<h1>Loading...</h1>}>
+              <AboutPage />
+            </Suspense>
+          } />
           <Route path='/problems' element={<Problems />} />
+          <Route path="/users" element={<UsersPage />} />
         </Route>
 
         {/* Public Routes */}
