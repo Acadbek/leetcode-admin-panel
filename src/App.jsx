@@ -11,6 +11,7 @@ import UsersPage from './_root/pages/users'
 // import with lazy loading
 const DashboardPage = React.lazy(() => import('./_root/pages/dashboard'))
 const AboutPage = React.lazy(() => import('./_root/pages/about'))
+const UserProfilePage = React.lazy(() => import('./_root/pages/user/profile'))
 
 
 const App = () => {
@@ -27,6 +28,11 @@ const App = () => {
           <Route path="/about" element={
             <Suspense fallback={<h1>Loading...</h1>}>
               <AboutPage />
+            </Suspense>
+          } />
+          <Route path="/user/:id" element={
+            <Suspense fallback={<h1>Loading...</h1>}>
+              <UserProfilePage />
             </Suspense>
           } />
           <Route path='/problems' element={<Problems />} />
