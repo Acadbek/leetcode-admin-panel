@@ -147,15 +147,6 @@ export function ContactSupport() {
           </CardContent>
         </Card>
       </div>
-
-      <div className="mt-8 text-center">
-        <p className="text-sm text-gray-500">
-          For urgent issues, please contact the development team directly at{" "}
-          <a href="mailto:dev-team@example.com" className="text-blue-600 hover:underline">
-            dev-team@example.com
-          </a>
-        </p>
-      </div>
     </section>
   )
 }
