@@ -70,7 +70,7 @@ export default function ContestsPage() {
       description: "Sponsored by Google. Solve challenging problems and get a chance to win exciting prizes!",
       sponsor: {
         name: "Google",
-        logo: "/placeholder.svg?height=40&width=120",
+        logo: "https://www.google.com/favicon.ico",
       },
       problemCount: 5,
     },
@@ -101,7 +101,7 @@ export default function ContestsPage() {
       description: "Sponsored by Amazon. Showcase your skills and get noticed by Amazon recruiters!",
       sponsor: {
         name: "Amazon",
-        logo: "/placeholder.svg?height=40&width=120",
+        logo: "https://www.amazon.com/favicon.ico",
       },
       problemCount: 5,
     },
@@ -177,7 +177,7 @@ export default function ContestsPage() {
       date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
       participants: 3245,
       winner: "algoguru",
-      winnerAvatar: "/placeholder.svg?height=32&width=32",
+      winnerAvatar: "",
       myRank: null,
       participated: false,
       problemCount: 4,
@@ -190,7 +190,7 @@ export default function ContestsPage() {
       date: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000), // 21 days ago
       participants: 6789,
       winner: "devninja",
-      winnerAvatar: "/placeholder.svg?height=32&width=32",
+      winnerAvatar: "",
       myRank: 123,
       participated: true,
       problemCount: 5,
