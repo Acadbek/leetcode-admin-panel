@@ -18,7 +18,7 @@ export function NavMain({
             <SidebarMenuItem key={item.title}>
               <NavLink
                 className={({ isActive }) =>
-                  `flex items-center gap-2 w-full ${isActive ? "bg-gray-100 rounded-md" : ""}`
+                  `flex items-center gap-2 w-full ${isActive ? "bg-gray-200 dark:bg-zinc-800 rounded-md" : ""}`
                 }
                 to={item.url}>
                 <SidebarMenuButton tooltip={item.title}>

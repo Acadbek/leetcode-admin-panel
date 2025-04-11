@@ -138,7 +138,6 @@ export function ContactSupport() {
                   </Select>
                 </div>
               </div>
-
               <Button type="submit" className="mt-4 w-full">
                 <Bug className="h-4 w-4 mr-2" />
                 Submit Bug Report
