@@ -11,6 +11,8 @@ import { LoadingProvider } from './context/loading-state'
 import { LoadingBarContainer } from 'react-top-loading-bar'
 import ContestsPage from './_root/pages/contest'
 import HelpPage from './_root/pages/help'
+import BlogPage from './_root/pages/blog'
+import AnalyticsPage from './_root/pages/analytics'
 
 // import with lazy loading
 const DashboardPage = React.lazy(() => import('./_root/pages/dashboard'))
@@ -50,6 +52,16 @@ const App = () => {
               <Route path="/help" element={
                 <Suspense fallback={<h1>Loading...</h1>}>
                   <HelpPage />
+                </Suspense>
+              } />
+              <Route path="/blog" element={
+                <Suspense fallback={<h1>Loading...</h1>}>
+                  <BlogPage />
+                </Suspense>
+              } />
+              <Route path="/analytics" element={
+                <Suspense fallback={<h1>Loading...</h1>}>
+                  <AnalyticsPage />
                 </Suspense>
               } />
               <Route path='/problems' element={<Problems />} />
