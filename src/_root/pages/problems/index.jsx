@@ -13,8 +13,19 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { useLoading } from '@/context/loading-state'
 
 const Problems = () => {
+  const { run, stop } = useLoading()
+
+  React.useEffect(() => {
+    run()
+    const timer = setTimeout(() => {
+      stop()
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
+
 
   const truncateTitle = title => title.length > 64 ? `${title.slice(0, 64)}...` : title
 

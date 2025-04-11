@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import {
   Activity,
   AlertCircle,
@@ -26,10 +26,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { AreaChart, BarChart } from "@/components/user-profile-chart"
 import { useNavigate } from "react-router-dom"
+import { useLoading } from "@/context/loading-state"
 
 export default function UserProfilePage() {
   const [activeTab, setActiveTab] = useState("daily")
   const navigate = useNavigate()
+  const { run, stop } = useLoading()
+
+  React.useEffect(() => {
+    run()
+    const timer = setTimeout(() => {
+      stop()
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Sample data for the charts
   const dailyData = [
@@ -149,7 +159,7 @@ export default function UserProfilePage() {
         return <Badge>{result}</Badge>
     }
   }
-  
+
 
   return (
     <div className="container mx-auto p-4 space-y-6">

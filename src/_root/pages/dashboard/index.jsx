@@ -20,11 +20,11 @@ import { TrendingUp } from "lucide-react"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useLoading } from '@/context/loading-state'
 
 const problemData = [
   { level: "Oson", Soni: 186, fill: "#21C55E" },
@@ -424,8 +424,17 @@ const problemChartConfig = {
 
 }
 
-
 const DashboardPage = () => {
+  const { run, stop } = useLoading()
+
+  React.useEffect(() => {
+    run()
+    const timer = setTimeout(() => {
+      stop()
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
+  
   return (
     <div className='flex flex-col gap-5'>
       <SectionCards />
