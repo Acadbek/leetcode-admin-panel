@@ -1,15 +1,18 @@
 import { AppSidebar } from '@/components/app-sidebar'
 import { SiteHeader } from '@/components/site-header'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { useUser } from '@/context/UserContext'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 const RootLayout = () => {
+  const { user, isAuthenticated, logout } = useUser();
   return (
     <main>
       <SidebarProvider>
         <AppSidebar variant="inset" />
         <SidebarInset>
+          {JSON.stringify(isAuthenticated)}
           <SiteHeader />
           <div className="flex flex-1 flex-col">
             <div className="container flex flex-1 flex-col gap-2">

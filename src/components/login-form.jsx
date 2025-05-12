@@ -1,17 +1,39 @@
 import { GalleryVerticalEnd } from "lucide-react"
-
+import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useLogin } from "@/hooks/queries/useLogin"
+import { useNavigate } from "react-router-dom";
+import storage from "@/api/localStorage";
 
 export function LoginForm({
   className,
   ...props
-}) {
+}) {  
+  const navigate = useNavigate();
+
+  const { mutate: login, isPending, error } = useLogin();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const onSubmit = (data) => {
+    login(data, {
+      onSuccess: (res) => {
+        console.log("Login successful", res);
+        // navigate to dashboard
+        storage.setItem("accessToken", res.accessToken);
+        navigate("/");
+      },
+      onError: (err) => {
+        console.log("Login failed", err);
+      },
+    });
+  }
+
   return (
     (<div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
             <a href="#" className="flex flex-col items-center gap-2 font-medium">
@@ -30,13 +52,13 @@ export function LoginForm({
           </div>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Label htmlFor="username">Username</Label>
+              <Input id="username" type="text" {...register("username")} placeholder="username" required className={cn("", errors.username && "border-red-500")} />
               <Label htmlFor="password" className="mt-3">Password</Label>
-              <Input id="password" type="password" placeholder="********" required />
+              <Input id="password" type="password" {...register("password")} placeholder="********" required className={cn("", errors.password && "border-red-500")} />
             </div>
             <Button type="submit" className="w-full">
-              Login
+              {isPending ? "Loading..." : "Login"}
             </Button>
           </div>
           {/* <div
