@@ -8,7 +8,7 @@ export const instance = ky.create({
         if (!request.headers.get("Authorization")) {
           request.headers.set(
             "Authorization",
-            `Bearer ${localStorage.getItem("token")}`
+            `Bearer ${localStorage.getItem("accessToken")}`
           );
         }
       },

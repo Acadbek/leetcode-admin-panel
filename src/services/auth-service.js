@@ -1,5 +1,5 @@
-import { AUTH_ENDPOINTS } from "@/api/endpoints";
-import { instance } from "@/api/ky-instance";
+import { AUTH_ENDPOINTS } from '@/api/endpoints';
+import { instance } from '@/api/ky-instance';
 
 export const authService = {
   login: async (payload) => {
@@ -23,17 +23,23 @@ export const authService = {
   },
 
   forgotPassword: async (payload) => {
-    const res = await instance.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, { json: payload });
+    const res = await instance.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+      json: payload,
+    });
     return res.json();
   },
 
   resetPassword: async (payload) => {
-    const res = await instance.post(AUTH_ENDPOINTS.RESET_PASSWORD, { json: payload });
+    const res = await instance.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
+      json: payload,
+    });
     return res.json();
   },
 
   changePassword: async (payload) => {
-    const res = await instance.post(AUTH_ENDPOINTS.CHANGE_PASSWORD, { json: payload });
+    const res = await instance.post(AUTH_ENDPOINTS.CHANGE_PASSWORD, {
+      json: payload,
+    });
     return res.json();
   },
 };

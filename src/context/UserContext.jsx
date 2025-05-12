@@ -12,21 +12,6 @@ const UserContext = createContext(undefined);
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const logout = () => {
-    authService.logout();
-    setUser(null);
-    storage.clear();
-  };
-
-  const fetchUser = async () => {
-    try {
-      const me = await authService.me();
-      setUser(me);
-    } catch {
-      setUser(null);
-    }
-  };
-
   useEffect(() => {
     const token = storage.getItem("accessToken");
     if (token) {
@@ -36,7 +21,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, logout, isAuthenticated: !!user }}
+      value={{ user, setUser, isAuthenticated: !!user }}
     >
       {children}
     </UserContext.Provider>

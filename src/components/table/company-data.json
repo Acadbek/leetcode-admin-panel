@@ -1,0 +1,98 @@
+[
+  {
+    "id": "TASK-8782",
+    "name": "School-1",
+    "email": "school-1@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-7878", 
+    "name": "School-2",
+    "email": "school-2@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-7839",
+    "name": "School-3",
+    "email": "school-3@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-5562",
+    "name": "School-4",
+    "email": "school-4@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-8686",
+    "name": "School-5",
+    "email": "school-5@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-1280",
+    "name": "School-6",
+    "email": "school-6@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-7262",
+    "name": "School-7",
+    "email": "school-7@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-1138",
+    "name": "School-8",
+    "email": "school-8@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-7184",
+    "name": "School-9",
+    "email": "school-9@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-5160",
+    "name": "School-10",
+    "email": "school-10@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-5618",
+    "name": "School-11",
+    "email": "school-11@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-6699",
+    "name": "School-12",
+    "email": "school-12@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "TASK-8782",
+    "name": "1-School",
+    "email": "school-1@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  },
+  {
+    "id": "TASK-7878",
+    "name": "2-School",
+    "email": "school-2@gmail.com",
+    "phone": "123456789",
+    "description": "description description",
+    "address": "address address"
+  }
+]

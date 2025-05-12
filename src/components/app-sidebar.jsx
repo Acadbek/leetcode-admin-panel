@@ -42,7 +42,17 @@ const data = {
       icon: LayoutDashboardIcon,
     },
     {
-      title: "Foydalanuvchilar",
+      title: "Groups",
+      url: "/groups",
+      icon: ListIcon,
+    },
+    {
+      title: "Company",
+      url: "/company",
+      icon: ListIcon,
+    },
+    {
+      title: "Users",
       url: "/users",
       icon: ListIcon,
     },

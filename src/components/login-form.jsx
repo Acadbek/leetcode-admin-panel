@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { useLogin } from "@/hooks/queries/useLogin"
 import { useNavigate } from "react-router-dom";
 import storage from "@/api/localStorage";
+import { toast } from "sonner"
 
 export function LoginForm({
   className,
@@ -21,12 +22,14 @@ export function LoginForm({
     login(data, {
       onSuccess: (res) => {
         console.log("Login successful", res);
-        // navigate to dashboard
         storage.setItem("accessToken", res.accessToken);
+        storage.setItem('refreshToken', res.refreshToken);
+        toast.success("Login successful");
         navigate("/");
       },
       onError: (err) => {
         console.log("Login failed", err);
+        toast.error(err.message);
       },
     });
   }
