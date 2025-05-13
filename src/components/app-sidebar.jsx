@@ -28,6 +28,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useUser } from '@/hooks/queries/useUser';
 
 const data = {
   user: {
@@ -150,6 +151,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }) {
+  const { data: user, isLoading, error, isError } = useUser();
   return (
     <Sidebar collapsible='offcanvas' {...props}>
       <SidebarHeader>
@@ -172,7 +174,7 @@ export function AppSidebar({ ...props }) {
         <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser isLoading={isLoading} user={user} />
       </SidebarFooter>
     </Sidebar>
   );
