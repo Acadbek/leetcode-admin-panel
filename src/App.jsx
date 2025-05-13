@@ -22,6 +22,10 @@ import { Toaster } from '@/components/ui/sonner';
 import CompanyPage from './_root/pages/company';
 import { DialogProvider } from './context/dialog-context';
 import CreateCompanyPage from './_root/pages/company/create-company';
+import GroupsPage from './_root/pages/groups';
+import CompanySlugPage from './_root/pages/company/company-profile';
+import CompanyProfilePage from './_root/pages/company/company-profile';
+import CreateGroupPage from './_root/pages/groups/create-group';
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -58,6 +62,30 @@ const App = () => {
                     element={
                       <Suspense fallback={<h1>Loading...</h1>}>
                         <CreateCompanyPage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path='/company/:id'
+                    element={
+                      <Suspense fallback={<h1>Loading...</h1>}>
+                        <CompanyProfilePage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path='/groups'
+                    element={
+                      <Suspense fallback={<h1>Loading...</h1>}>
+                        <GroupsPage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path='/groups/create'
+                    element={
+                      <Suspense fallback={<h1>Loading...</h1>}>
+                        <CreateGroupPage />
                       </Suspense>
                     }
                   />

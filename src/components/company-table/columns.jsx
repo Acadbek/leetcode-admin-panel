@@ -1,102 +1,106 @@
-"use client"
+'use client';
 
-import { Checkbox } from "@/components/ui/checkbox"
-import { DataTableColumnHeader } from "@/components/company-table/data-table-column-header"
-import { DataTableRowActions } from "@/components/company-table/data-table-row-actions"
+import { Checkbox } from '@/components/ui/checkbox';
+import { DataTableColumnHeader } from '@/components/company-table/data-table-column-header';
+import { DataTableRowActions } from '@/components/company-table/data-table-row-actions';
+import { Link } from 'react-router-dom';
 
 export const columns = [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
+        aria-label='Select all'
+        className='translate-y-[2px]'
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
+        aria-label='Select row'
+        className='translate-y-[2px]'
       />
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title='Name' />
     ),
     cell: ({ row }) => (
-      <span className="max-w-[500px] truncate font-medium">
-        {row.getValue("name")}
+      <Link
+        to={`/company/${row.getValue('name')}`}
+        className='max-w-[500px] truncate font-medium'
+      >
+        {row.getValue('name')}
+      </Link>
+    ),
+  },
+  {
+    accessorKey: 'email',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Email' />
+    ),
+    cell: ({ row }) => (
+      <span className='max-w-[500px] truncate font-medium'>
+        {row.getValue('email')}
       </span>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: 'phone',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
+      <DataTableColumnHeader column={column} title='Phone' />
     ),
     cell: ({ row }) => (
-      <span className="max-w-[500px] truncate font-medium">
-        {row.getValue("email")}
+      <span className='max-w-[500px] truncate font-medium'>
+        {row.getValue('phone')}
       </span>
     ),
   },
   {
-    accessorKey: "phone",
+    accessorKey: 'description',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone" />
+      <DataTableColumnHeader column={column} title='Description' />
     ),
     cell: ({ row }) => (
-      <span className="max-w-[500px] truncate font-medium">
-        {row.getValue("phone")}
+      <span className='max-w-[500px] truncate font-medium'>
+        {row.getValue('description')}
       </span>
     ),
   },
   {
-    accessorKey: "description",
+    accessorKey: 'address',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Description" />
+      <DataTableColumnHeader column={column} title='Address' />
     ),
     cell: ({ row }) => (
-      <span className="max-w-[500px] truncate font-medium">
-        {row.getValue("description")}
+      <span className='max-w-[500px] truncate font-medium'>
+        {row.getValue('address')}
       </span>
     ),
   },
   {
-    accessorKey: "address",
+    accessorKey: 'admin.username',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Address" />
+      <DataTableColumnHeader column={column} title='Admin Username' />
     ),
     cell: ({ row }) => (
-      <span className="max-w-[500px] truncate font-medium">
-        {row.getValue("address")}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "admin.username",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Admin Username" />
-    ),
-    cell: ({ row }) => (
-      <span className="max-w-[500px] truncate font-medium">
+      <span className='max-w-[500px] truncate font-medium'>
         {row.original.admin?.username}
       </span>
     ),
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
-]
+];

@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react';
 import {
   ArrowUpCircleIcon,
   CameraIcon,
@@ -14,11 +14,11 @@ import {
   Rss,
   SearchIcon,
   SettingsIcon,
-} from "lucide-react"
+} from 'lucide-react';
 
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from '@/components/nav-main';
+import { NavSecondary } from '@/components/nav-secondary';
+import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
@@ -27,142 +27,141 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
 const data = {
   user: {
-    name: "Asadbek",
-    email: "a@example.com",
-    avatar: "https://avatars.githubusercontent.com/u/87940040?v=4",
+    name: 'Asadbek',
+    email: 'a@example.com',
+    avatar: 'https://avatars.githubusercontent.com/u/87940040?v=4',
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "/",
+      title: 'Dashboard',
+      url: '/',
       icon: LayoutDashboardIcon,
     },
     {
-      title: "Groups",
-      url: "/groups",
+      title: 'Company',
+      url: '/company',
       icon: ListIcon,
     },
     {
-      title: "Company",
-      url: "/company",
+      title: 'Groups',
+      url: '/groups',
       icon: ListIcon,
     },
     {
-      title: "Users",
-      url: "/users",
+      title: 'Users',
+      url: '/users',
       icon: ListIcon,
     },
     {
-      title: "Masalalar",
-      url: "/problems",
+      title: 'Masalalar',
+      url: '/problems',
       icon: Code,
     },
     {
-      title: "Musobaqalar",
-      url: "/contests",
+      title: 'Musobaqalar',
+      url: '/contests',
       icon: PartyPopper,
     },
     {
-      title: "Yordam va Shikoyatlar",
-      url: "/help",
+      title: 'Yordam va Shikoyatlar',
+      url: '/help',
       icon: MessageCircleQuestion,
     },
     {
-      title: "Blog / Yangiliklar",
-      url: "/blog",
+      title: 'Blog / Yangiliklar',
+      url: '/blog',
       icon: Rss,
     },
     {
-      title: "Analitika",
-      url: "/analytics",
+      title: 'Analitika',
+      url: '/analytics',
       icon: ChartNoAxesCombined,
     },
   ],
   navClouds: [
     {
-      title: "Capture",
+      title: 'Capture',
       icon: CameraIcon,
       isActive: true,
-      url: "#",
+      url: '#',
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: 'Active Proposals',
+          url: '#',
         },
         {
-          title: "Archived",
-          url: "#",
+          title: 'Archived',
+          url: '#',
         },
       ],
     },
     {
-      title: "Proposal",
+      title: 'Proposal',
       icon: FileTextIcon,
-      url: "#",
+      url: '#',
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: 'Active Proposals',
+          url: '#',
         },
         {
-          title: "Archived",
-          url: "#",
+          title: 'Archived',
+          url: '#',
         },
       ],
     },
     {
-      title: "Prompts",
+      title: 'Prompts',
       icon: FileCodeIcon,
-      url: "#",
+      url: '#',
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: 'Active Proposals',
+          url: '#',
         },
         {
-          title: "Archived",
-          url: "#",
+          title: 'Archived',
+          url: '#',
         },
       ],
     },
   ],
   navSecondary: [
     {
-      title: "Sozlamalar",
-      url: "/settings",
+      title: 'Sozlamalar',
+      url: '/settings',
       icon: SettingsIcon,
     },
     {
-      title: "Yordam",
-      url: "/get-help",
+      title: 'Yordam',
+      url: '/get-help',
       icon: HelpCircleIcon,
     },
     {
-      title: "Qidirish",
-      url: "/search",
+      title: 'Qidirish',
+      url: '/search',
       icon: SearchIcon,
     },
-
   ],
+};
 
-}
-
-export function AppSidebar({
-  ...props
-}) {
+export function AppSidebar({ ...props }) {
   return (
-    (<Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible='offcanvas' {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5">
-              <a href="#">
-                <ArrowUpCircleIcon className="h-5 w-5" />
-                <span className="text-base font-semibold">LOGO</span>
+            <SidebarMenuButton
+              asChild
+              className='data-[slot=sidebar-menu-button]:p-1.5'
+            >
+              <a href='#'>
+                <ArrowUpCircleIcon className='h-5 w-5' />
+                <span className='text-base font-semibold'>LOGO</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -170,11 +169,11 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
-    </Sidebar>)
+    </Sidebar>
   );
 }

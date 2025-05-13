@@ -15,3 +15,11 @@ export const COMPANY_ENDPOINTS = {
   UPDATE_COMPANY: "companies/:id",
   DELETE_COMPANY: "companies/:id",
 };
+
+export const GROUP_ENDPOINTS = {
+  CREATE_GROUP: "groups",
+  GET_GROUPS: "groups",
+  GET_GROUP: "groups/:id",
+  UPDATE_GROUP: "groups/:id",
+  DELETE_GROUP: "groups/:id",
+};

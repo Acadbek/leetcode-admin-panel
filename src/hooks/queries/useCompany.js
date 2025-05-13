@@ -18,6 +18,7 @@ export const useGetCompany = (id) => {
   return useQuery({
     queryKey: ['company', id],
     queryFn: () => companyService.getWithId(id),
+    enabled: !!id,
   });
 };
 
