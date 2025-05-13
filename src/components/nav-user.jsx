@@ -23,7 +23,6 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Link } from 'react-router-dom';
-import { useUser } from '@/hooks/queries/useUser';
 import { Skeleton } from './ui/skeleton';
 
 export function NavUser({ user, isLoading }) {
