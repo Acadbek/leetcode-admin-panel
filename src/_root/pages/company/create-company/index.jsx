@@ -220,7 +220,7 @@ const CreateCompanyPage = () => {
                       <Textarea
                         maxLength={300}
                         placeholder='Enter company description'
-                        className={`min-h-[100px] ${
+                        className={`min-h-[100px] resize-none ${
                           form.formState.errors.description
                             ? 'border-red-500 focus-visible:ring-red-500'
                             : ''
