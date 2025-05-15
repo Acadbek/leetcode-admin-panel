@@ -33,6 +33,7 @@ const CreateCompanyPage = () => {
     isLoading,
     isError,
     isSuccess,
+    status
   } = useCompany();
 
   // Define the schema for form validation
@@ -89,17 +90,20 @@ const CreateCompanyPage = () => {
 
   function onSubmit(data) {
     createCompany(data);
+    console.log(isSuccess, isError);
+    
     if (isSuccess) {
       toast({
-        title: 'Company information submitted',
+        title: status,
         description: 'Company data has been successfully saved.',
       });
     }
     if (isError) {
-      toast({
-        title: 'Error',
-        description: error?.message,
-      });
+      alert(error.message)
+      // toast({
+      //   title: 'Error',
+      //   description: error,
+      // });
     }
   }
 

@@ -7,7 +7,14 @@ export const useCreateGroups = () => {
   return useMutation({
     mutationFn: (payload) => groupsService.create(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['groups'] });
+      // queryClient.invalidateQueries({ queryKey: ['groups'] });
     },
+  });
+};
+
+export const useGetGroups = () => {
+  return useQuery({
+    queryKey: ['groups'],
+    queryFn: () => groupsService.get(),
   });
 };

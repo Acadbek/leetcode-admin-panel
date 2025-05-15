@@ -1,27 +1,27 @@
-"use client"
-
-import { DataTable2 } from '@/components/table/data-table2'
-import React from 'react'
-import data from '@/components/table/tasks'
-import { columns } from '@/components/table/columns'
-import { useLoading } from '@/context/loading-state'
+import React from 'react';
+import { columns } from '@/components/users-table/columns';
+import { useLoading } from '@/context/loading-state';
+import { useGetUsers } from '@/hooks/queries/useUsers';
+import { UsersDataTable } from '@/components/users-table/data-table';
 
 const UsersPage = () => {
   const { run, stop } = useLoading();
+  const { data: users } = useGetUsers();
 
   React.useEffect(() => {
-    run()
+    run();
     const timer = setTimeout(() => {
-      stop()
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [])
+      stop();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div>
-      <DataTable2 columns={columns} data={data} />
+      {/* Users <pre>{JSON.stringify(users?.content, null, 2)}</pre> */}
+      <UsersDataTable columns={columns} data={users?.content || []} />
     </div>
-  )
-}
+  );
+};
 
-export default UsersPage
+export default UsersPage;

@@ -128,7 +128,7 @@ const formSchema = z.object({
 });
 
 export default function CreateGroupPage() {
-  const { mutate: createGroup } = useCreateGroups();
+  const { mutate: createGroup, isSuccess, isError } = useCreateGroups();
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -162,7 +162,14 @@ export default function CreateGroupPage() {
   // Handle form submission
   const onSubmit = (data) => {
     console.log('Form submitted:', data);
-    createGroup(data);
+    const newData = {
+      name: data.title,
+      description: data.description,
+      mainTeacherId: data.mainTeacher,
+      coTeacherIds: [...selectedCoTeachers],
+    };
+
+    createGroup(newData);
     if (isSuccess) {
       toast({
         title: 'Group information submitted',

@@ -23,3 +23,7 @@ export const GROUP_ENDPOINTS = {
   UPDATE_GROUP: "groups/:id",
   DELETE_GROUP: "groups/:id",
 };
+
+export const USERS_ENDPOINTS = {
+  GET_USERS: "users",
+}

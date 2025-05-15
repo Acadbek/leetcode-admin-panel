@@ -39,7 +39,7 @@ export function NavUser({ user, isLoading }) {
               {isLoading ? (
                 <>
                   <Skeleton className='h-8 w-8 rounded-lg grayscale' />
-                  <Skeleton className='h-4 w-32 rounded-lg grayscale' />
+                  <Skeleton className='h-4 w-36 rounded-lg grayscale' />
                 </>
               ) : (
                 <Avatar className='h-8 w-8 rounded-lg grayscale'>

@@ -26,6 +26,7 @@ import GroupsPage from './_root/pages/groups';
 import CompanySlugPage from './_root/pages/company/company-profile';
 import CompanyProfilePage from './_root/pages/company/company-profile';
 import CreateGroupPage from './_root/pages/groups/create-group';
+import NetworkStatusAlert from './components/NetworkStatusAlert';
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => {
           <QueryClientProvider client={queryClient}>
             <LoadingProvider>
               <Toaster />
+              <NetworkStatusAlert />
               {/* Private Routes */}
               <Routes>
                 <Route element={<RootLayout />}>

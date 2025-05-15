@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LineChart, List, Search } from 'lucide-react';
+import { List, Search } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -14,13 +14,13 @@ import { Filter } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from 'lucide-react';
-import { Users } from 'lucide-react';
 import { Plus } from 'lucide-react';
 import { SortAsc } from 'lucide-react';
 import { AddStudentsModal } from './components/add-student-modal';
 import { GroupTable } from './components/group-table';
 import { GroupCard } from './components/group-card';
 import { Link } from 'react-router-dom';
+import { useCreateGroups, useGetGroups } from '@/hooks/queries/useGroups';
 
 // Sample data for groups
 const groups = [
@@ -91,6 +91,8 @@ const groups = [
 ];
 
 const GroupPage = () => {
+  const { mutateAsync: createGroup } = useCreateGroups();
+  // const { data: groups } = useGetGroups();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
@@ -246,7 +248,7 @@ const GroupPage = () => {
                 </TabsTrigger>
                 <TabsTrigger value='table' className='px-3'>
                   <div className='flex items-center gap-1'>
-                    <List className='h-4 w-4'/>
+                    <List className='h-4 w-4' />
                     <span className='hidden sm:inline'>Table</span>
                   </div>
                 </TabsTrigger>
