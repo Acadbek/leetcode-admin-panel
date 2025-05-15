@@ -112,7 +112,7 @@ const CreateCompanyPage = () => {
     <div className='px-4'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-          <Card>
+          <Card> 
             <CardHeader>
               <CardTitle>Company Information</CardTitle>
               <CardDescription>
