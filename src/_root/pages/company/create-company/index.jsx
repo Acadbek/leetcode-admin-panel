@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { useCompany } from '@/hooks/queries/useCompany';
+import { max } from 'date-fns';
 
 const CreateCompanyPage = () => {
   const {
@@ -33,7 +34,7 @@ const CreateCompanyPage = () => {
     isLoading,
     isError,
     isSuccess,
-    status
+    status,
   } = useCompany();
 
   // Define the schema for form validation
@@ -51,8 +52,8 @@ const CreateCompanyPage = () => {
       },
       { message: 'Telefon raqami noto‘g‘ri.' }
     ),
-    description: z.string().min(10, {
-      message: 'Description must be at least 10 characters.',
+    description: z.string().max(300, {
+      message: 'Description must be at least 300 characters.',
     }),
     address: z.string().min(5, {
       message: 'Address must be at least 5 characters.',
@@ -91,7 +92,7 @@ const CreateCompanyPage = () => {
   function onSubmit(data) {
     createCompany(data);
     console.log(isSuccess, isError);
-    
+
     if (isSuccess) {
       toast({
         title: status,
@@ -99,7 +100,7 @@ const CreateCompanyPage = () => {
       });
     }
     if (isError) {
-      alert(error.message)
+      alert(error.message);
       // toast({
       //   title: 'Error',
       //   description: error,
@@ -217,6 +218,7 @@ const CreateCompanyPage = () => {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
+                        maxLength={300}
                         placeholder='Enter company description'
                         className={`min-h-[100px] ${
                           form.formState.errors.description
