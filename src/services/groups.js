@@ -15,6 +15,16 @@ export const groupsService = {
     return res;
   },
 
+  getWithCompanyId: async (companyId) => {
+    const res = await instance.get(
+      GROUP_ENDPOINTS.GET_GROUPS_WITH_COMPANY_ID.replace(
+        ':companyId',
+        companyId
+      )
+    );
+    return res;
+  },
+
   getWithId: async (id) => {
     const res = await instance.get(
       GROUP_ENDPOINTS.GET_GROUP.replace(':id', id)

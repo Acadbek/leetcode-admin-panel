@@ -6,9 +6,17 @@ export const useCreateGroups = () => {
 
   return useMutation({
     mutationFn: (payload) => groupsService.create(payload),
-    onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ['groups'] });
-    },
+    // onSuccess: () => {
+    //   // queryClient.invalidateQueries({ queryKey: ['groups'] });
+    // },
+  });
+};
+
+export const useGetGroupsWithCompanyId = (companyId) => {
+  return useQuery({
+    queryKey: ['groups', companyId],
+    queryFn: () => groupsService.getWithCompanyId(companyId),
+    enabled: !!companyId,
   });
 };
 

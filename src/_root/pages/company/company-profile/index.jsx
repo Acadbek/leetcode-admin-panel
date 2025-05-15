@@ -14,6 +14,8 @@ import {
   Lock,
   LogOut,
   Mail,
+  Map,
+  Phone,
   Plus,
   Shield,
   User,
@@ -45,11 +47,21 @@ import {
 import { AreaChart, BarChart } from '@/components/user-profile-chart';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLoading } from '@/context/loading-state';
+import { useGetGroupsWithCompanyId } from '@/hooks/queries/useGroups';
+import { parsePhoneNumber } from 'awesome-phonenumber';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function CompanyProfilePage() {
   const [activeTab, setActiveTab] = useState('daily');
   const navigate = useNavigate();
   const { run, stop } = useLoading();
+  const { id: companyId } = useParams();
+
+  const {
+    data: groups,
+    isLoading: isLoadingGroups,
+    isError: isErrorGroups,
+  } = useGetGroupsWithCompanyId(companyId);
 
   React.useEffect(() => {
     run();
@@ -202,19 +214,6 @@ export default function CompanyProfilePage() {
     },
   ];
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case 'Easy':
-        return 'bg-green-100 text-green-800';
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'Hard':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   const getResultBadge = (result) => {
     switch (result) {
       case 'Accepted':
@@ -245,8 +244,29 @@ export default function CompanyProfilePage() {
         return <Badge>{result}</Badge>;
     }
   };
-  const { id } = useParams();
-  const { data: company, isLoading, isError } = useGetCompany(id);
+
+  function formatUzbekPhoneNumber(input) {
+    if (!input) return 'N/A';
+
+    const digits = input.toString().replace(/\D/g, '');
+
+    let normalized = digits;
+
+    if (digits.length === 9) {
+      normalized = '998' + digits;
+    }
+
+    if (normalized.length === 12 && normalized.startsWith('998')) {
+      return `+998 ${normalized.slice(3, 5)} ${normalized.slice(
+        5,
+        8
+      )} ${normalized.slice(8, 10)} ${normalized.slice(10)}`;
+    }
+
+    return input;
+  }
+
+  const { data: company, isLoading, isError } = useGetCompany(companyId);
 
   return (
     <div className='container mx-auto p-4 space-y-6'>
@@ -263,7 +283,7 @@ export default function CompanyProfilePage() {
             variant='secondary'
             className='mr-2'
           >
-            <LogOut className='mr-2 h-4 w-4' /> Back to Company
+            <LogOut className='mr-2 h-4 w-4' /> Back to Companies
           </Button>
         </div>
       </div>
@@ -278,60 +298,98 @@ export default function CompanyProfilePage() {
               Basic Information
             </CardTitle>
           </CardHeader>
-          <CardContent className='space-y-4'>
-            <div className='flex justify-center mb-6'>
-              <div className='relative'>
-                <div className='h-24 w-24 rounded-full bg-secondary flex items-center justify-center text-2xl font-bold text-primary'>
-                  JD
-                </div>
-                <Badge className='absolute bottom-0 right-0 bg-green-500 hover:bg-green-500'>
-                  Active
-                </Badge>
-              </div>
-            </div>
 
-            <div className='space-y-4'>
-              <div>
-                {/* <p className="text-sm text-muted-foreground">Full Name</p> */}
-                <p className='font-medium text-primary'>1 School</p>
-              </div>
-              <div>
-                {/* <p className="text-sm text-muted-foreground">Username</p> */}
-                <p className='font-medium text-gray-400'>@1school</p>
-              </div>
-              <div>
-                {/* <p className="text-sm text-muted-foreground">Email</p> */}
-                <div className='flex items-center'>
-                  <Mail className='mr-2 h-4 w-4 text-muted-foreground' />
-                  <p className='font-medium'>1school@example.com</p>
+          {isLoading ? (
+            <CompanyCardSkeleton />
+          ) : (
+            <CardContent className='space-y-4'>
+              <div className='flex justify-center mb-6'>
+                <div className='relative'>
+                  <div className='h-24 w-24 rounded-full bg-secondary flex items-center justify-center text-2xl font-bold text-primary'>
+                    {company?.name?.slice(0, 2).toUpperCase()}
+                  </div>
+                  {company?.active ? (
+                    <Badge className='absolute bottom-0 left-0 translate-x-1/3 translate-y-1/5 bg-green-500 hover:bg-green-500'>
+                      Active
+                    </Badge>
+                  ) : (
+                    <Badge className='absolute bottom-0 left-0 translate-x-1/3 translate-y-1/5 bg-red-500 hover:bg-red-500'>
+                      Inactive
+                    </Badge>
+                  )}
                 </div>
               </div>
-              <div>
-                {/* <p className="text-sm text-muted-foreground">Role</p> */}
+
+              <div className='space-y-4'>
                 <div className='flex items-center'>
-                  <Shield className='mr-2 h-4 w-4 text-muted-foreground' />
-                  <p className='font-medium'>Administrator</p>
+                  {/* <p className="text-sm text-muted-foreground">Full Name</p> */}
+                  <Building className='mr-2 h-4 w-4 text-muted-foreground' />
+                  <p className='font-medium text-primary'>{company?.name}</p>
+                </div>
+                <div>
+                  {/* <p className="text-sm text-muted-foreground">Username</p> */}
+                  <p className='font-medium text-primary flex items-center'>
+                    <Phone className='mr-2 h-4 w-4 text-muted-foreground' />{' '}
+                    <a href={`tel:${formatUzbekPhoneNumber(company?.phone)}`}>
+                      {formatUzbekPhoneNumber(company?.phone)}
+                    </a>
+                  </p>
+                </div>
+                <div>
+                  {/* <p className="text-sm text-muted-foreground">Email</p> */}
+                  <div className='flex items-center'>
+                    <Mail className='mr-2 h-4 w-4 text-muted-foreground' />
+                    <a className='mb-1' href={`mailto:${company?.email}`}>
+                      {company?.email}
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  {/* <p className="text-sm text-muted-foreground">Role</p> */}
+                  <div className='flex items-center'>
+                    <Map className='mr-2 h-4 w-4 text-muted-foreground' />
+                    <p className='font-medium line-clamp-1'>
+                      {company?.address}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p className='text-sm text-muted-foreground'>
+                    Registration Date
+                  </p>
+                  <div className='flex items-center'>
+                    <Calendar className='mr-2 h-4 w-4 text-muted-foreground' />
+                    <p className='font-medium'>
+                      {company?.createdAt &&
+                        format(
+                          new Date(company?.createdAt.split('.')[0] + 'Z'),
+                          'dd-MM-yyyy'
+                        )}
+                    </p>
+                    <p className='ml-2 flex items-center'>
+                      <Clock className='mx-1 h-4 w-4 text-muted-foreground' />
+                      <span>
+                        {company?.createdAt &&
+                          format(
+                            new Date(company?.createdAt.split('.')[0] + 'Z'),
+                            'HH:mm'
+                          )}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p className='text-sm text-muted-foreground'>Description</p>
+                  <p
+                    title={company?.description}
+                    className='font-medium line-clamp-6'
+                  >
+                    {company?.description}
+                  </p>
                 </div>
               </div>
-              <div>
-                <p className='text-sm text-muted-foreground'>
-                  Registration Date
-                </p>
-                <div className='flex items-center'>
-                  <Calendar className='mr-2 h-4 w-4 text-muted-foreground' />
-                  <p className='font-medium'>Jan 15, 2023</p>
-                </div>
-              </div>
-              <div>
-                <p className='text-sm text-muted-foreground'>Last Login</p>
-                <p className='font-medium'>Today, 10:30 AM</p>
-              </div>
-              <div>
-                <p className='text-sm text-muted-foreground'>Last IP Address</p>
-                <p className='font-medium'>192.168.1.1</p>
-              </div>
-            </div>
-          </CardContent>
+            </CardContent>
+          )}
         </Card>
 
         {/* Statistics Card */}
@@ -345,33 +403,28 @@ export default function CompanyProfilePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6'>
-              <div className='bg-secondary p-4 rounded-lg'>
-                <p className='text-sm text-muted-foreground'>Total Users</p>
-                <p className='text-2xl font-bold'>127</p>
+            {isLoading ? (
+              <CompanyStatsSkeleton />
+            ) : (
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6'>
+                <div className='bg-secondary p-4 rounded-lg'>
+                  <p className='text-sm text-muted-foreground'>Total Users</p>
+                  <p className='text-2xl font-bold'>{company?.totalUsers}</p>
+                </div>
+                <div className='bg-secondary p-4 rounded-lg'>
+                  <p className='text-sm text-muted-foreground'>Active Users</p>
+                  <p className='text-2xl font-bold'>{company?.activeUsers}</p>
+                </div>
+                <div className='bg-secondary p-4 rounded-lg'>
+                  <p className='text-sm text-muted-foreground'>Total Groups</p>
+                  <p className='text-2xl font-bold'>{company?.totalGroups}</p>
+                </div>
+                <div className='bg-secondary p-4 rounded-lg'>
+                  <p className='text-sm text-muted-foreground'>Active Groups</p>
+                  <p className='text-2xl font-bold'>{company?.activeGroups}</p>
+                </div>
               </div>
-              <div className='bg-secondary p-4 rounded-lg'>
-                <p className='text-sm text-muted-foreground'>Total Contests</p>
-                <p className='text-2xl font-bold'>342</p>
-              </div>
-              <div className='bg-secondary p-4 rounded-lg'>
-                <p className='text-sm text-muted-foreground'>Total Companies</p>
-                <p className='text-2xl font-bold'>289</p>
-              </div>
-              <div className='bg-secondary p-4 rounded-lg'>
-                <p className='text-sm text-muted-foreground'>Total Groups</p>
-                <p className='text-2xl font-bold'>53</p>
-              </div>
-              <div className='bg-secondary p-4 rounded-lg'>
-                <p className='text-sm text-muted-foreground'>Total Contests</p>
-                <p className='text-2xl font-bold'>84.5%</p>
-              </div>
-              <div className='bg-secondary p-4 rounded-lg'>
-                <p className='text-sm text-muted-foreground'>Avg. Contests</p>
-                <p className='text-2xl font-bold'>24m</p>
-              </div>
-            </div>
-
+            )}
             <div className='space-y-4'>
               <div className='flex justify-between items-center mb-4'>
                 <h3 className='text-lg font-medium'>Activity</h3>
@@ -608,6 +661,68 @@ export default function CompanyProfilePage() {
           </Button>
         </CardFooter>
       </Card>
+    </div>
+  );
+}
+
+export function CompanyCardSkeleton() {
+  return (
+    <div className='space-y-4 px-6'>
+      <div className='flex justify-center mb-6'>
+        <div className='relative'>
+          <Skeleton className='h-24 w-24 rounded-full' />
+        </div>
+      </div>
+
+      <div className='space-y-4'>
+        <div className='flex items-center space-x-2'>
+          <Skeleton className='h-4 w-4 rounded-full' />
+          <Skeleton className='h-4 w-32' />
+        </div>
+
+        <div className='flex items-center space-x-2'>
+          <Skeleton className='h-4 w-4 rounded-full' />
+          <Skeleton className='h-4 w-40' />
+        </div>
+
+        <div className='flex items-center space-x-2'>
+          <Skeleton className='h-4 w-4 rounded-full' />
+          <Skeleton className='h-4 w-40' />
+        </div>
+
+        <div className='flex items-center space-x-2'>
+          <Skeleton className='h-4 w-4 rounded-full' />
+          <Skeleton className='h-4 w-48' />
+        </div>
+
+        <div>
+          <Skeleton className='h-4 w-28 mb-1' />
+          <div className='flex items-center space-x-2'>
+            <Skeleton className='h-4 w-4 rounded-full' />
+            <Skeleton className='h-4 w-24' />
+            <Skeleton className='h-4 w-4 rounded-full' />
+            <Skeleton className='h-4 w-16' />
+          </div>
+        </div>
+
+        <div>
+          <Skeleton className='h-4 w-28 mb-1' />
+          <Skeleton className='h-20 w-full' />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function CompanyStatsSkeleton() {
+  return (
+    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6'>
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className='bg-secondary p-5 rounded-lg space-y-2'>
+          <Skeleton className='h-4 w-24' />
+          <Skeleton className='h-5 w-20' />
+        </div>
+      ))}
     </div>
   );
 }

@@ -37,7 +37,7 @@ export const columns = [
     ),
     cell: ({ row }) => (
       <Link
-        to={`/company/${row.getValue('name')}`}
+        to={`/company/${row?.original?.id}`}
         className='max-w-[500px] truncate font-medium'
       >
         {row.getValue('name')}

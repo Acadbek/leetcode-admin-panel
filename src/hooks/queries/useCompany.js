@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { companyService } from '@/services/company';
+import { groupsService } from '@/services/groups';
 
 export const useCompany = () => {
   return useMutation({
