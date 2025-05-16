@@ -27,6 +27,8 @@ export const GROUP_ENDPOINTS = {
 
 export const USERS_ENDPOINTS = {
   GET_USERS: 'users',
+  CREATE_STUDENT: 'users/student',
+  CREATE_STAFF: 'users/staff',
 };
 
 export const PROBLEMS_ENDPOINTS = {

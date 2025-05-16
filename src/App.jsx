@@ -27,6 +27,7 @@ import CompanySlugPage from './_root/pages/company/company-profile';
 import CompanyProfilePage from './_root/pages/company/company-profile';
 import CreateGroupPage from './_root/pages/groups/create-group';
 import NetworkStatusAlert from './components/NetworkStatusAlert';
+import CreateUserPage from './_root/pages/users/create-user';
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -141,6 +142,14 @@ const App = () => {
                   />
                   <Route path='/problems' element={<Problems />} />
                   <Route path='/users' element={<UsersPage />} />
+                  <Route
+                    path='/users/create'
+                    element={
+                      <Suspense>
+                        <CreateUserPage />
+                      </Suspense>
+                    }
+                  />
                 </Route>
 
                 {/* Public Routes */}
