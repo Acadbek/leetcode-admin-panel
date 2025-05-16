@@ -3,10 +3,11 @@ import { columns } from '@/components/users-table/columns';
 import { useLoading } from '@/context/loading-state';
 import { useGetUsers } from '@/hooks/queries/useUsers';
 import { UsersDataTable } from '@/components/users-table/data-table';
+import { TableSkeleton } from '@/components/TableSkeleton';
 
 const UsersPage = () => {
   const { run, stop } = useLoading();
-  const { data: users } = useGetUsers();
+  const { data: users, isLoading, isError, error } = useGetUsers();
 
   React.useEffect(() => {
     run();
@@ -19,7 +20,11 @@ const UsersPage = () => {
   return (
     <div>
       {/* Users <pre>{JSON.stringify(users?.content, null, 2)}</pre> */}
-      <UsersDataTable columns={columns} data={users?.content || []} />
+      {isLoading ? (
+        <TableSkeleton />
+      ) : (
+        <UsersDataTable columns={columns} data={users?.content || []} />
+      )}
     </div>
   );
 };

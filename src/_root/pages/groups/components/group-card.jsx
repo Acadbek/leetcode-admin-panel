@@ -40,9 +40,13 @@ export function GroupCard({ group, onAddStudents }) {
             <h3 className='font-semibold leading-none tracking-tight'>
               {group?.name}
             </h3>
-            <p className='text-sm text-muted-foreground'>{group?.description}</p>
+            <p className='text-sm text-muted-foreground'>
+              {group?.description}
+            </p>
           </div>
-          <Badge className={getStatusColor(group?.status)}>{group?.status}</Badge>
+          <Badge className={getStatusColor(group?.status)}>
+            {group?.status}
+          </Badge>
         </div>
       </CardHeader>
       <CardContent className='pb-2'>

@@ -446,7 +446,7 @@ export default function CompanyProfilePage() {
                       data={dailyData}
                       index='name'
                       categories={['value']}
-                      colors={['emerald']}
+                      colors={['blue']}
                       valueFormatter={(value) => `${value}`}
                       className='h-full'
                     />
@@ -456,7 +456,7 @@ export default function CompanyProfilePage() {
                       data={weeklyData}
                       index='name'
                       categories={['value']}
-                      colors={['violet']}
+                      colors={['blue']}
                       valueFormatter={(value) => `${value}`}
                       className='h-full'
                     />
@@ -466,7 +466,7 @@ export default function CompanyProfilePage() {
                       data={monthlyData}
                       index='name'
                       categories={['value']}
-                      colors={['cyan']}
+                      colors={['blue']}
                       valueFormatter={(value) => `${value} `}
                       className='h-full'
                     />

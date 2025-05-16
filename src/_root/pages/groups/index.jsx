@@ -21,6 +21,7 @@ import { GroupTable } from './components/group-table';
 import { GroupCard } from './components/group-card';
 import { Link } from 'react-router-dom';
 import { useCreateGroups, useGetGroups } from '@/hooks/queries/useGroups';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Sample data for groups
 const groups = [
@@ -92,7 +93,7 @@ const groups = [
 
 const GroupPage = () => {
   const { mutateAsync: createGroup } = useCreateGroups();
-  // const { data: groups } = useGetGroups();
+  // const { data: groups, isLoading, isError, error } = useGetGroups();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
@@ -302,6 +303,47 @@ const GroupPage = () => {
         onClose={() => setIsAddStudentsModalOpen(false)}
         groupId={selectedGroupId}
       />
+    </div>
+  );
+};
+
+const GroupPageSkeleton = () => {
+  return (
+    <div className='container mx-auto px-4'>
+      <div className='flex flex-col gap-6'>
+        {/* Header */}
+        <div className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
+          <Skeleton className='h-8 w-40' />
+          <Skeleton className='h-10 w-48' />
+        </div>
+
+        {/* Search & Filters */}
+        <div className='grid gap-4 md:grid-cols-12'>
+          <Skeleton className='h-10 w-full md:col-span-5' />
+          <div className='flex items-center gap-2 md:col-span-7 md:justify-end'>
+            <Skeleton className='h-10 w-28' />
+            <Skeleton className='h-10 w-28' />
+            <Skeleton className='h-10 w-20' />
+          </div>
+        </div>
+
+        {/* Cards */}
+        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+          {[...Array(6)].map((_, idx) => (
+            <div
+              key={idx}
+              className='rounded-lg border p-4 shadow-sm space-y-4'
+            >
+              <Skeleton className='h-6 w-2/3' />
+              <Skeleton className='h-4 w-full' />
+              <Skeleton className='h-4 w-1/2' />
+              <Skeleton className='h-3 w-1/3' />
+              <Skeleton className='h-4 w-2/5' />
+              <Skeleton className='h-8 w-full mt-2' />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
