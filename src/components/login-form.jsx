@@ -12,7 +12,7 @@ import { toast } from "sonner"
 export function LoginForm({
   className,
   ...props
-}) {  
+}) {
   const navigate = useNavigate();
 
   const { mutate: login, isPending, error } = useLogin();
@@ -61,7 +61,7 @@ export function LoginForm({
               <Input id="password" type="password" {...register("password")} placeholder="********" required className={cn("", errors.password && "border-red-500")} />
             </div>
             <Button type="submit" className="w-full">
-              {isPending ? "Loading..." : "Login"}
+              {isPending ? "Logging in..." : "Login"}
             </Button>
           </div>
           {/* <div

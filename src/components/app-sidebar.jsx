@@ -28,7 +28,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { useUser } from '@/hooks/queries/useUser';
+import { useUser } from '@/context/UserContext';
 
 const data = {
   user: {
@@ -163,7 +163,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }) {
-  const { data: user, isLoading, error, isError } = useUser();
+  const { user, isLoadingAuth } = useUser();
   return (
     <Sidebar collapsible='offcanvas' {...props}>
       <SidebarHeader>
@@ -186,7 +186,7 @@ export function AppSidebar({ ...props }) {
         <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser isLoading={isLoading} user={user} />
+        <NavUser isLoading={isLoadingAuth} user={user} />
       </SidebarFooter>
     </Sidebar>
   );
