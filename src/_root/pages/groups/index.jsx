@@ -93,6 +93,7 @@ const groups = [
 
 const GroupPage = () => {
   const { mutateAsync: createGroup } = useCreateGroups();
+  const { data: groups2, isLoading, isError, error } = useGetGroups(1);
   // const { data: groups, isLoading, isError, error } = useGetGroups();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -103,6 +104,7 @@ const GroupPage = () => {
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
+    console.log(groups2);
   }, []);
 
   // Filter groups based on search query and status filter
@@ -206,10 +208,10 @@ const GroupPage = () => {
                     {sortBy === 'studentCount'
                       ? 'Students'
                       : sortBy === 'createdDate'
-                      ? 'Date'
-                      : sortBy === 'progress'
-                      ? 'Progress'
-                      : 'Name'}
+                        ? 'Date'
+                        : sortBy === 'progress'
+                          ? 'Progress'
+                          : 'Name'}
                   </span>
                   <ChevronDown className='h-4 w-4' />
                 </Button>

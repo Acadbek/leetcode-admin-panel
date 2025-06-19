@@ -15,6 +15,9 @@ const CompanyPage = () => {
     isPending,
   } = useGetCompanies();
 
+  console.log(companies);
+
+
   return (
     <section>
       {isLoading ? (

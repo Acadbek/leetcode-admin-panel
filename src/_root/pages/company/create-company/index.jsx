@@ -24,6 +24,7 @@ import {
 import { toast } from '@/hooks/use-toast';
 import { useCompany } from '@/hooks/queries/useCompany';
 import { max } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const CreateCompanyPage = () => {
   const {
@@ -36,6 +37,7 @@ const CreateCompanyPage = () => {
     isSuccess,
     status,
   } = useCompany();
+  const navigate = useNavigate();
 
   // Define the schema for form validation
   const companyFormSchema = z.object({
@@ -93,12 +95,6 @@ const CreateCompanyPage = () => {
     createCompany(data);
     console.log(isSuccess, isError);
 
-    if (isSuccess) {
-      toast({
-        title: status,
-        description: 'Company data has been successfully saved.',
-      });
-    }
     if (isError) {
       alert(error.message);
       // toast({
@@ -112,7 +108,7 @@ const CreateCompanyPage = () => {
     <div className='px-4'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-          <Card> 
+          <Card>
             <CardHeader>
               <CardTitle>Company Information</CardTitle>
               <CardDescription>
@@ -131,11 +127,10 @@ const CreateCompanyPage = () => {
                         <Input
                           placeholder='Company Name'
                           {...field}
-                          className={`${
-                            form.formState.errors.name
-                              ? 'border-red-500 focus-visible:ring-red-500'
-                              : ''
-                          }`}
+                          className={`${form.formState.errors.name
+                            ? 'border-red-500 focus-visible:ring-red-500'
+                            : ''
+                            }`}
                         />
                       </FormControl>
                       <FormMessage className='text-red-500' />
@@ -152,11 +147,10 @@ const CreateCompanyPage = () => {
                         <Input
                           placeholder='company@example.com'
                           {...field}
-                          className={`${
-                            form.formState.errors.email
-                              ? 'border-red-500 focus-visible:ring-red-500'
-                              : ''
-                          }`}
+                          className={`${form.formState.errors.email
+                            ? 'border-red-500 focus-visible:ring-red-500'
+                            : ''
+                            }`}
                         />
                       </FormControl>
                       <FormMessage className='text-red-500' />
@@ -176,11 +170,10 @@ const CreateCompanyPage = () => {
                         <Input
                           placeholder='Phone Number'
                           {...field}
-                          className={`${
-                            form.formState.errors.phone
-                              ? 'border-red-500 focus-visible:ring-red-500'
-                              : ''
-                          }`}
+                          className={`${form.formState.errors.phone
+                            ? 'border-red-500 focus-visible:ring-red-500'
+                            : ''
+                            }`}
                         />
                       </FormControl>
                       <FormMessage className='text-red-500' />
@@ -197,11 +190,10 @@ const CreateCompanyPage = () => {
                         <Input
                           placeholder='Company Address'
                           {...field}
-                          className={`${
-                            form.formState.errors.address
-                              ? 'border-red-500 focus-visible:ring-red-500'
-                              : ''
-                          }`}
+                          className={`${form.formState.errors.address
+                            ? 'border-red-500 focus-visible:ring-red-500'
+                            : ''
+                            }`}
                         />
                       </FormControl>
                       <FormMessage className='text-red-500' />
@@ -220,11 +212,10 @@ const CreateCompanyPage = () => {
                       <Textarea
                         maxLength={300}
                         placeholder='Enter company description'
-                        className={`min-h-[100px] resize-none ${
-                          form.formState.errors.description
-                            ? 'border-red-500 focus-visible:ring-red-500'
-                            : ''
-                        }`}
+                        className={`min-h-[100px] resize-none ${form.formState.errors.description
+                          ? 'border-red-500 focus-visible:ring-red-500'
+                          : ''
+                          }`}
                         {...field}
                       />
                     </FormControl>
@@ -253,11 +244,10 @@ const CreateCompanyPage = () => {
                       <Input
                         placeholder='Admin Username'
                         {...field}
-                        className={`${
-                          form.formState.errors.admin?.username
-                            ? 'border-red-500 focus-visible:ring-red-500'
-                            : ''
-                        }`}
+                        className={`${form.formState.errors.admin?.username
+                          ? 'border-red-500 focus-visible:ring-red-500'
+                          : ''
+                          }`}
                       />
                     </FormControl>
                     <FormMessage className='text-red-500' />
@@ -276,11 +266,10 @@ const CreateCompanyPage = () => {
                         <Input
                           placeholder='First Name'
                           {...field}
-                          className={`${
-                            form.formState.errors.admin?.firstName
-                              ? 'border-red-500 focus-visible:ring-red-500'
-                              : ''
-                          }`}
+                          className={`${form.formState.errors.admin?.firstName
+                            ? 'border-red-500 focus-visible:ring-red-500'
+                            : ''
+                            }`}
                         />
                       </FormControl>
                       <FormMessage className='text-red-500' />
@@ -297,11 +286,10 @@ const CreateCompanyPage = () => {
                         <Input
                           placeholder='Last Name'
                           {...field}
-                          className={`${
-                            form.formState.errors.admin?.lastName
-                              ? 'border-red-500 focus-visible:ring-red-500'
-                              : ''
-                          }`}
+                          className={`${form.formState.errors.admin?.lastName
+                            ? 'border-red-500 focus-visible:ring-red-500'
+                            : ''
+                            }`}
                         />
                       </FormControl>
                       <FormMessage className='text-red-500' />

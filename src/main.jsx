@@ -4,12 +4,15 @@ import App from './App.jsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from './components/ui/toaster.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <Toaster />
-      <App />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Toaster />
+        <App />
+      </BrowserRouter>
+    </ErrorBoundary>
   </StrictMode>
 );

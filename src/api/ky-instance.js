@@ -12,8 +12,7 @@ const tokenService = {
   clearTokens: () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    // Foydalanuvchi holatini (context/store) ham tozalash kerak bo'lishi mumkin
-    window.dispatchEvent(new Event('auth-logout')); // Logout uchun global hodisa
+    window.dispatchEvent(new Event('auth-logout'));
   },
 };
 
@@ -48,6 +47,20 @@ const processQueue = (error, token = null) => {
 // Refresh token uchun alohida `ky` instansi, interceptorlar tsikliga tushib qolmaslik uchun
 const refreshInstance = ky.create({
   prefixUrl: VITE_API_URL,
+  hooks: {
+    afterResponse: [
+      async (request, options, response) => {
+        if (response.status === 500) {
+          const errorBody = await response.text(); // yoki response.json()
+          console.error('🔥 500 error caught:', errorBody);
+
+          // Alert, toast yoki redirect
+          alert('Serverda ichki xatolik yuz berdi. Keyinroq urinib ko‘ring.');
+        }
+        return response;
+      }
+    ]
+  }
 });
 
 export const instance = ky.create({

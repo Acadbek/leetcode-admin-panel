@@ -20,9 +20,10 @@ export const useGetGroupsWithCompanyId = (companyId) => {
   });
 };
 
-export const useGetGroups = () => {
+export const useGetGroups = (companyId) => {
   return useQuery({
-    queryKey: ['groups'],
-    queryFn: () => groupsService.get(),
+    queryKey: ['groups', companyId],
+    queryFn: () => groupsService.get(companyId),
+    enabled: !!companyId,
   });
 };

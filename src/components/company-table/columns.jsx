@@ -4,6 +4,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/company-table/data-table-column-header';
 import { DataTableRowActions } from '@/components/company-table/data-table-row-actions';
 import { Link } from 'react-router-dom';
+import { Badge } from '../ui/badge';
+
+const truncateText = (text) => {
+  return text.length > 40 ? text.slice(0, 40) + '...' : text
+}
 
 export const columns = [
   {
@@ -72,8 +77,8 @@ export const columns = [
       <DataTableColumnHeader column={column} title='Description' />
     ),
     cell: ({ row }) => (
-      <span className='max-w-[500px] truncate font-medium'>
-        {row.getValue('description')}
+      <span title={row.getValue('description')} className='max-w-[500px] truncate font-medium'>
+        {truncateText(row.getValue('description'))}
       </span>
     ),
   },
@@ -84,18 +89,22 @@ export const columns = [
     ),
     cell: ({ row }) => (
       <span className='max-w-[500px] truncate font-medium'>
-        {row.getValue('address')}
+        {truncateText(row.getValue('address'))}
       </span>
     ),
   },
   {
-    accessorKey: 'admin.username',
+    accessorKey: 'status',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Admin Username' />
+      <DataTableColumnHeader column={column} title='Status' />
     ),
     cell: ({ row }) => (
       <span className='max-w-[500px] truncate font-medium'>
-        {row.original.admin?.username}
+        {row.original.status === 'active' ? (
+          <Badge variant='default'>Active</Badge>
+        ) : (
+          <Badge variant='destructive'>Inactive</Badge>
+        )}
       </span>
     ),
   },

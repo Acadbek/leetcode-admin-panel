@@ -10,9 +10,11 @@ export const groupsService = {
     return res;
   },
 
-  get: async () => {
-    const res = await instance.get(GROUP_ENDPOINTS.GET_GROUPS);
-    return res;
+  get: async (companyId) => {
+    const res = await instance.get(
+      GROUP_ENDPOINTS.GET_GROUPS + `?companyId=${companyId}`
+    );
+    return await res.json();
   },
 
   getWithCompanyId: async (companyId) => {
