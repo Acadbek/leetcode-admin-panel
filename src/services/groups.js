@@ -1,13 +1,24 @@
 import { GROUP_ENDPOINTS } from '@/api/endpoints';
 import { instance } from '@/api/ky-instance';
+import { toast } from 'sonner';
 
 export const groupsService = {
   create: async (payload) => {
-    const res = await instance.post(GROUP_ENDPOINTS.CREATE_GROUP, {
-      json: payload,
-    });
+    try {
+      const res = await instance.post(GROUP_ENDPOINTS.CREATE_GROUP, {
+        json: payload,
+      });
 
-    return res;
+      if (!res.ok) {
+        throw new Error('Failed to create group');
+      }
+      toast.success('Group created successfully');
+
+      return res;
+    } catch (error) {
+      toast.error('Failed to create group');
+      return error;
+    }
   },
 
   get: async (companyId) => {

@@ -1,23 +1,13 @@
-'use client';
-
 import { useState } from 'react';
 // import { useRouter } from 'next/navigation';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { CalendarIcon, Check, ChevronsUpDown, X } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown, Loader2, X } from 'lucide-react';
 import { format } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -58,146 +48,132 @@ import { useToast } from '@/hooks/use-toast';
 import { useCreateGroups } from '@/hooks/queries/useGroups';
 
 // Sample teacher data
-const teachers = [
-  {
-    id: '1',
-    name: 'Sarah Johnson',
-    role: 'Senior Teacher',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '2',
-    name: 'Michael Brown',
-    role: 'English Teacher',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '3',
-    name: 'Emily Davis',
-    role: 'ESL Specialist',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '4',
-    name: 'Robert Wilson',
-    role: 'Business English Specialist',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '5',
-    name: 'Jennifer Lee',
-    role: 'Language Coach',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '6',
-    name: 'David Thompson',
-    role: 'IELTS Examiner',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '7',
-    name: 'Lisa Chen',
-    role: 'Conversation Coach',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '8',
-    name: 'Mark Taylor',
-    role: 'Grammar Specialist',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-  {
-    id: '9',
-    name: 'Amanda Parker',
-    role: 'Pronunciation Expert',
-    avatar: '/placeholder.svg?height=40&width=40',
-  },
-];
+// const teachers = [
+//   {
+//     id: '1',
+//     name: 'Sarah Johnson',
+//     role: 'Senior Teacher',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '2',
+//     name: 'Michael Brown',
+//     role: 'English Teacher',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '3',
+//     name: 'Emily Davis',
+//     role: 'ESL Specialist',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '4',
+//     name: 'Robert Wilson',
+//     role: 'Business English Specialist',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '5',
+//     name: 'Jennifer Lee',
+//     role: 'Language Coach',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '6',
+//     name: 'David Thompson',
+//     role: 'IELTS Examiner',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '7',
+//     name: 'Lisa Chen',
+//     role: 'Conversation Coach',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '8',
+//     name: 'Mark Taylor',
+//     role: 'Grammar Specialist',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+//   {
+//     id: '9',
+//     name: 'Amanda Parker',
+//     role: 'Pronunciation Expert',
+//     avatar: '/placeholder.svg?height=40&width=40',
+//   },
+// ];
 
 // Form schema with validation
 const formSchema = z.object({
-  title: z.string().min(3, 'Group title must be at least 3 characters long'),
+  name: z.string().min(3, 'Group title must be at least 3 characters long'),
   status: z.string().min(1, 'Status is required'),
   description: z.string().optional(),
-  createdAt: z.date(),
-  studentCount: z.coerce.number().min(0, 'Student count must be at least 0'),
-  mainTeacher: z.string().optional(),
-  mainTeacherRole: z.string().optional(),
-  coTeachers: z.array(z.string()).optional(),
+  mainTeacherId: z.string().nullable(),
+  coTeacherIds: z.array(z.string()).optional(),
 });
 
 export default function CreateGroupPage() {
-  const { mutate: createGroup, isSuccess, isError } = useCreateGroups();
+  const { mutate: createGroup, isSuccess, isError, error, isLoading } = useCreateGroups();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { toast } = useToast();
-  const [selectedCoTeachers, setSelectedCoTeachers] = useState([]);
+  const [_, setSelectedCoTeachers] = useState([]);
   const [openCoTeachers, setOpenCoTeachers] = useState(false);
 
   // Initialize form with default values
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
+      name: '',
       status: 'Active',
       description: '',
       createdAt: new Date(),
-      studentCount: 0,
-      mainTeacher: '',
-      mainTeacherRole: '',
-      coTeachers: [],
+      // studentCount: 0,
+      mainTeacherId: null,
+      // mainTeacherRole: '',
+      coTeacherIds: [],
     },
   });
 
   // Watch for main teacher changes to update the role field
-  const mainTeacherId = form.watch('mainTeacher');
-  const mainTeacher = teachers.find((teacher) => teacher.id === mainTeacherId);
+  const mainTeacherId = form.watch('mainTeacherId');
+  // const mainTeacher = teachers.find((teacher) => teacher.id === mainTeacherId);
 
   // Update the main teacher role when the main teacher changes
-  if (mainTeacher && form.getValues('mainTeacherRole') !== mainTeacher.role) {
-    form.setValue('mainTeacherRole', mainTeacher.role);
-  }
+  // if (mainTeacher && form.getValues('mainTeacherRole') !== mainTeacher.role) {
+  //   form.setValue('mainTeacherRole', mainTeacher.role);
+  // }
 
   // Handle form submission
   const onSubmit = (data) => {
-    console.log('Form submitted:', data);
-    const newData = {
-      name: data.title,
+    const payload = {
+      companyId: 1,
+      // companyId: Number(companyId), // URLdan string keladi, Number ga o‘giramiz
+      name: data.name,
       description: data.description,
-      mainTeacherId: data.mainTeacher,
-      coTeacherIds: [...selectedCoTeachers],
+      status: data.status.toUpperCase(), // 'Active' → 'ACTIVE'
+      mainTeacherId: data.mainTeacherId || null,
+      coTeacherIds: data.coTeacherIds || [],
     };
-
-    createGroup(newData);
-    if (isSuccess) {
-      toast({
-        title: 'Group information submitted',
-        description: 'Group data has been successfully saved.',
-      });
-    }
+    createGroup(payload);
     if (isError) {
       toast({
         title: 'Error',
         description: error?.message,
       });
     }
-    // Show success toast
-    toast({
-      title: 'Group created successfully',
-      description: `Group "${data.title}" has been created.`,
-    });
-
     // Redirect to groups list
-    setTimeout(() => {
-      navigate('/groups');
-    }, 1000);
+    // setTimeout(() => {
+    //   navigate('/groups');
+    // }, 1000);
   };
 
   // Handle cancel button
-  const handleCancel = () => {
-    navigate('/groups');
-  };
+  // const handleCancel = () => {
+  //   navigate('/groups');
+  // };
 
   return (
     <div className=''>
@@ -217,15 +193,15 @@ export default function CreateGroupPage() {
                   {/* Group Title */}
                   <FormField
                     control={form.control}
-                    name='title'
+                    name='name'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          Group Title{' '}
+                          Group Name{' '}
                           <span className='text-destructive'>*</span>
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder='Enter group title' {...field} />
+                          <Input placeholder='Enter group name' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -332,9 +308,9 @@ export default function CreateGroupPage() {
                 {/* Right Column */}
                 <div className='space-y-6'>
                   {/* Student Count */}
-                  <FormField
+                  {/* <FormField
                     control={form.control}
-                    name='studentCount'
+                    name='studentIds'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Student Count</FormLabel>
@@ -359,12 +335,12 @@ export default function CreateGroupPage() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
 
                   {/* Main Teacher */}
                   <FormField
                     control={form.control}
-                    name='mainTeacher'
+                    name='mainTeacherId'
                     render={({ field }) => (
                       <FormItem className='flex flex-col'>
                         <FormLabel>Main Teacher</FormLabel>
@@ -379,11 +355,12 @@ export default function CreateGroupPage() {
                                   !field.value && 'text-muted-foreground'
                                 )}
                               >
-                                {field.value
+                                Select main teacher
+                                {/* {field.value
                                   ? teachers.find(
-                                      (teacher) => teacher.id === field.value
-                                    )?.name
-                                  : 'Select main teacher'}
+                                    (teacher) => teacher.id === field.value
+                                  )?.name
+                                  : 'Select main teacher'} */}
                                 <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                               </Button>
                             </FormControl>
@@ -393,7 +370,7 @@ export default function CreateGroupPage() {
                               <CommandInput placeholder='Search teachers...' />
                               <CommandList>
                                 <CommandEmpty>No teacher found.</CommandEmpty>
-                                <CommandGroup>
+                                {/* <CommandGroup>
                                   <ScrollArea className='h-[200px]'>
                                     {teachers.map((teacher) => (
                                       <CommandItem
@@ -441,7 +418,7 @@ export default function CreateGroupPage() {
                                       </CommandItem>
                                     ))}
                                   </ScrollArea>
-                                </CommandGroup>
+                                </CommandGroup> */}
                               </CommandList>
                             </Command>
                           </PopoverContent>
@@ -455,7 +432,7 @@ export default function CreateGroupPage() {
                   />
 
                   {/* Main Teacher Role */}
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name='mainTeacherRole'
                     render={({ field }) => (
@@ -474,12 +451,12 @@ export default function CreateGroupPage() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
 
                   {/* Co-Teachers */}
                   <FormField
                     control={form.control}
-                    name='coTeachers'
+                    name='coTeacherIds'
                     render={({ field }) => (
                       <FormItem className='flex flex-col'>
                         <FormLabel>Co-Teachers</FormLabel>
@@ -495,16 +472,15 @@ export default function CreateGroupPage() {
                                 className={cn(
                                   'w-full justify-between',
                                   !field.value?.length &&
-                                    'text-muted-foreground'
+                                  'text-muted-foreground'
                                 )}
                                 onClick={() =>
                                   setOpenCoTeachers(!openCoTeachers)
                                 }
                               >
                                 {field.value?.length
-                                  ? `${field.value.length} teacher${
-                                      field.value.length > 1 ? 's' : ''
-                                    } selected`
+                                  ? `${field.value.length} teacher${field.value.length > 1 ? 's' : ''
+                                  } selected`
                                   : 'Select co-teachers'}
                                 <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                               </Button>
@@ -516,7 +492,7 @@ export default function CreateGroupPage() {
                               <CommandList>
                                 <CommandEmpty>No teacher found.</CommandEmpty>
                                 <CommandGroup>
-                                  <ScrollArea className='h-[200px]'>
+                                  {/* <ScrollArea className='h-[200px]'>
                                     {teachers
                                       .filter(
                                         (teacher) =>
@@ -530,15 +506,15 @@ export default function CreateGroupPage() {
                                             const updatedTeachers =
                                               field.value?.includes(teacher.id)
                                                 ? field.value.filter(
-                                                    (id) => id !== teacher.id
-                                                  )
+                                                  (id) => id !== teacher.id
+                                                )
                                                 : [
-                                                    ...(field.value || []),
-                                                    teacher.id,
-                                                  ];
+                                                  ...(field.value || []),
+                                                  teacher.id,
+                                                ];
 
                                             form.setValue(
-                                              'coTeachers',
+                                              'coTeacherIds',
                                               updatedTeachers
                                             );
                                             setSelectedCoTeachers(
@@ -576,7 +552,7 @@ export default function CreateGroupPage() {
                                           />
                                         </CommandItem>
                                       ))}
-                                  </ScrollArea>
+                                  </ScrollArea> */}
                                 </CommandGroup>
                               </CommandList>
                             </Command>
@@ -586,10 +562,10 @@ export default function CreateGroupPage() {
                         {field.value && field.value.length > 0 && (
                           <div className='flex flex-wrap gap-1 mt-2'>
                             {field.value.map((teacherId) => {
-                              const teacher = teachers.find(
-                                (t) => t.id === teacherId
-                              );
-                              if (!teacher) return null;
+                              // const teacher = teachers.find(
+                              //   (t) => t.id === teacherId
+                              // );
+                              // if (!teacher) return null;
 
                               return (
                                 <Badge
@@ -617,7 +593,7 @@ export default function CreateGroupPage() {
                                           (id) => id !== teacherId
                                         ) || [];
                                       form.setValue(
-                                        'coTeachers',
+                                        'coTeacherIds',
                                         updatedTeachers
                                       );
                                       setSelectedCoTeachers(updatedTeachers);
@@ -643,7 +619,9 @@ export default function CreateGroupPage() {
               </div>
             </div>
             <div className='flex justify-between pt-6 border-t px-4 mt-6'>
-              <Button type='submit'>Create Group</Button>
+              <Button type='submit'>
+                {isLoading ? <Loader2 className='h-4 w-4 animate-spin' /> : 'Create Group'}
+              </Button>
             </div>
           </form>
         </Form>

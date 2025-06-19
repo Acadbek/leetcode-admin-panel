@@ -62,7 +62,7 @@ export const columns = [
       <DataTableColumnHeader column={column} title='Role' />
     ),
     cell: ({ row }) => (
-      <span className='max-w-[500px] lowercase truncate font-medium'>
+      <span className='max-w-[500px] capitalize truncate font-medium'>
         {row.getValue('role')}
       </span>
     ),
@@ -85,18 +85,19 @@ export const columns = [
     ),
     cell: ({ row }) => (
       <span className='max-w-[500px] truncate font-medium'>
-        {row.getValue('groups').join(', ')}
+        {/* {row.getValue('groups').join(', ')} */}
+        {row.getValue('groups') ? row.getValue('groups').join(', ') : 'No groups'}
       </span>
     ),
   },
   {
-    accessorKey: 'active',
+    accessorKey: 'status',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Status' />
     ),
     cell: ({ row }) => (
       <span className='max-w-[500px] truncate font-medium'>
-        {row.getValue('active') == true ? (
+        {row.getValue('status') == 'ACTIVE' ? (
           <Badge variant='default'>Active</Badge>
         ) : (
           <Badge variant='destructive'>Inactive</Badge>

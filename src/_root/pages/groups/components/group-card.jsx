@@ -8,6 +8,7 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function GroupCard({ group, onAddStudents }) {
   const getStatusColor = (status) => {
@@ -24,7 +25,11 @@ export function GroupCard({ group, onAddStudents }) {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'N/A';
+
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'short',
@@ -37,10 +42,10 @@ export function GroupCard({ group, onAddStudents }) {
       <CardHeader className='pb-2'>
         <div className='flex items-start justify-between'>
           <div className='space-y-1'>
-            <h3 className='font-semibold leading-none tracking-tight'>
+            <h3 title={group?.name} className='font-semibold leading-none tracking-tight line-clamp-1'>
               {group?.name}
             </h3>
-            <p className='text-sm text-muted-foreground'>
+            <p title={group?.description} className='text-sm text-muted-foreground line-clamp-2'>
               {group?.description}
             </p>
           </div>
@@ -54,7 +59,7 @@ export function GroupCard({ group, onAddStudents }) {
           <div className='grid grid-cols-2 gap-2 text-sm'>
             <div className='flex items-center gap-1'>
               <Calendar className='h-4 w-4 text-muted-foreground' />
-              <span>{formatDate(group?.createdDate)}</span>
+              <span>{formatDate(group?.createdAt)}</span>
             </div>
             <div className='flex items-center gap-1'>
               <Users className='h-4 w-4 text-muted-foreground' />
@@ -63,6 +68,7 @@ export function GroupCard({ group, onAddStudents }) {
           </div>
 
           <div className='space-y-2'>
+            {group?.mainTeacher?.name && (
             <div className='flex flex-col'>
               <span className='text-xs text-muted-foreground'>
                 Main Teacher
@@ -71,9 +77,10 @@ export function GroupCard({ group, onAddStudents }) {
                 {group?.mainTeacher?.name}
               </span>
               <span className='text-xs text-muted-foreground'>
-                {group?.mainTeacher?.role}
-              </span>
-            </div>
+                  {group?.mainTeacher?.role}
+                </span>
+              </div>
+            )}
 
             {group?.coTeachers?.length > 0 && (
               <div className='flex flex-col'>
@@ -97,15 +104,19 @@ export function GroupCard({ group, onAddStudents }) {
               </div>
             )}
 
-            <div className='flex flex-col'>
-              <span className='text-xs text-muted-foreground'>Schedule</span>
-              <span className='text-sm'>{group?.schedule}</span>
-            </div>
+            {group?.schedule && (
+              <div className='flex flex-col'>
+                <span className='text-xs text-muted-foreground'>Schedule</span>
+                <span className='text-sm'>{group?.schedule}</span>
+              </div>
+            )}
 
-            <div className='flex flex-col'>
-              <span className='text-xs text-muted-foreground'>Company</span>
-              <span className='text-sm'>{group?.company}</span>
-            </div>
+            {group?.company && (
+              <div className='flex flex-col'>
+                <span className='text-xs text-muted-foreground'>Company</span>
+                <span className='text-sm'>{group?.company}</span>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

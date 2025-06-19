@@ -17,7 +17,7 @@ export const usersSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   role: z.string(),
-  active: z.boolean(),
+  status: z.string(),
   companyId: z.string().nullable(),
   companyName: z.string().nullable(),
   createdAt: z.string(),

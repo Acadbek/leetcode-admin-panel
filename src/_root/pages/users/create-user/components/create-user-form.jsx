@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -48,7 +46,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { useCreateUser } from '@/hooks/queries/useUsers';
+// Bu yerda useCreateUser o'rniga, ikkalasini ham ishlatamiz
+import { useCreateStaff, useCreateStudent } from '@/hooks/queries/useUsers';
 
 // Base schema for shared fields
 const baseSchema = z.object({
@@ -65,7 +64,8 @@ const studentSchema = baseSchema.extend({
     .number()
     .int()
     .nonnegative('Group ID must be a non-negative integer')
-    .optional(),
+    .optional() // `optional()` bo'lsa ham, ba'zan server tarafda majburiy bo'lishi mumkin. Shunga qarab to'g'irlang.
+    .nullable(), // Agar null bo'lishi mumkin bo'lsa
 });
 
 // Staff schema extends base schema with groupIds array
@@ -86,22 +86,21 @@ const groups = [
   { id: 4, name: 'Group E' },
 ];
 
-export function UserCreationForm({ onSubmit }) {
+export function UserCreationForm() { // onSubmit propini olib tashladik, chunki u ichida boshqariladi
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // isSubmitting state'ini o'rniga isLoading dan foydalanamiz
+  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedGroups, setSelectedGroups] = useState([]);
   const [openGroupsPopover, setOpenGroupsPopover] = useState(false);
 
-  const {
-    mutateAsync: createUser,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-    data,
-  } = useCreateUser();
+  // Ikki xil hook'ni chaqiramiz
+  const { mutateAsync: createStudent, isLoading: isCreatingStudent } = useCreateStudent();
+  const { mutateAsync: createStaff, isLoading: isCreatingStaff } = useCreateStaff();
 
-  // Initialize form with default values
+  // Umumiy yuklanish holati
+  const isSubmitting = isCreatingStudent || isCreatingStaff;
+
+  // Formani default qiymatlar bilan ishga tushirish
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -110,95 +109,100 @@ export function UserCreationForm({ onSubmit }) {
       lastName: '',
       username: '',
       sendToEmail: '',
-      groupId: undefined,
+      groupId: undefined, // undefined bo'lishi kerak, null emas, chunki optional
+      groupIds: [], // Massiv bo'lishi kerak
     },
   });
 
-  // Get current role
+  // Joriy rolni kuzatish
   const currentRole = form.watch('role');
 
-  // Reset form fields when role changes
+  // Rol o'zgarganda form maydonlarini qayta tiklash
   const handleRoleChange = (role) => {
-    // Reset form values based on the selected role
     if (role === 'student') {
       form.reset({
-        ...form.getValues(),
+        ...form.getValues(), // Mavjud qadriyatlarni saqlaymiz
         role: 'student',
-        groupId: undefined,
+        groupId: undefined, // Student uchun groupId undefined bo'ladi
+        groupIds: [], // Staff uchun groupIds ni tozalaymiz
       });
-      setSelectedGroups([]);
+      setSelectedGroups([]); // Tanlangan guruhlarni tozalaymiz
     } else {
       form.reset({
         ...form.getValues(),
         role: 'staff',
-        groupIds: [],
+        groupId: undefined, // Student uchun groupId ni tozalaymiz
+        groupIds: [], // Staff uchun groupIds ni bo'sh massivga o'rnatamiz
       });
+      setSelectedGroups([]);
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async (data) => {
-    setIsSubmitting(true);
-
+  // Formani yuborishni boshqarish
+  const onSubmit = async (data) => {
     try {
-      const cleanData = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        username: data.username,
-        sendToEmail: data.sendToEmail,
-        ...(data.role === 'student'
-          ? { groupId: data.groupId }
-          : { groupIds: Array.isArray(data.groupIds) ? data.groupIds : null }),
-      };
-      createUser({ data: cleanData, role: currentRole });
-      console.log(cleanData, currentRole);
+      if (data.role === 'student') {
+        const studentData = {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          username: data.username,
+          sendToEmail: data.sendToEmail,
+          groupId: data.groupId,
+        };
+        await createStudent(studentData); // Student yaratish hook'ini chaqiramiz
+        toast({
+          title: 'Student created successfully',
+          description: `Student ${data.firstName} ${data.lastName} has been created.`,
+        });
+      } else { // currentRole === 'staff'
+        const staffData = {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          username: data.username,
+          sendToEmail: data.sendToEmail,
+          // groupIds Array.isArray(data.groupIds) bo'lishini zod tekshiradi.
+          // Agar tanlanmagan bo'lsa, z.array().optional().nullable() ga ko'ra [] yoki null bo'lishi mumkin.
+          // Agar null bo'lsa server tarafida qabul qilishga e'tibor bering.
+          groupIds: data.groupIds,
+        };
+        await createStaff(staffData); // Staff yaratish hook'ini chaqiramiz
+        toast({
+          title: 'Staff created successfully',
+          description: `Staff member ${data.firstName} ${data.lastName} has been created.`,
+        });
+      }
 
-      // Show success toast
-      // toast({
-      //   title: 'User created successfully',
-      //   description: `${
-      //     data.role.charAt(0).toUpperCase() + data.role.slice(1)
-      //   } user ${data.firstName} ${data.lastName} has been created.`,
-      // });
-
-      // Reset form
+      // Muvaffaqiyatli bo'lgandan keyin formani qayta tiklash
       form.reset({
-        role: data.role,
+        role: currentRole, // Rolni saqlab qolamiz
         firstName: '',
         lastName: '',
         username: '',
         sendToEmail: '',
-        ...(data.role === 'student'
-          ? { groupId: undefined }
-          : { groupIds: [] || null }),
+        groupId: undefined,
+        groupIds: [],
       });
+      setSelectedGroups([]); // Tanlangan guruhlarni tozalaymiz
 
-      setSelectedGroups([]);
     } catch (error) {
-      // Show error toast
+      console.error("User creation failed:", error); // Xatoni konsolda ko'rsatish
       toast({
         title: 'Error creating user',
-        description:
-          error instanceof Error ? error.message : 'An unknown error occurred',
+        // Serverdan kelgan aniqroq xabarni ko'rsatishga harakat qiling
+        description: error.response?.data?.message || 'An unknown error occurred',
         variant: 'destructive',
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
-  // Toggle group selection for staff role
+  // Staff roli uchun guruh tanlashni boshqarish
   const toggleGroup = (groupId) => {
     setSelectedGroups((current) => {
-      if (current.includes(groupId)) {
-        const updated = current.filter((id) => id !== groupId);
-        form.setValue('groupIds', updated, { shouldValidate: true });
-        return updated;
-      } else {
-        const updated = [...current, groupId];
-        form.setValue('groupIds', updated, { shouldValidate: true });
-        return updated;
-      }
+      const updated = current.includes(groupId)
+        ? current.filter((id) => id !== groupId)
+        : [...current, groupId];
+      form.setValue('groupIds', updated, { shouldValidate: true }); // form.setValue orqali yangilash
+      return updated;
     });
   };
 
@@ -211,7 +215,7 @@ export function UserCreationForm({ onSubmit }) {
         </CardDescription>
       </CardHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className='space-y-6'>
             {/* Role Selection - Full width */}
             <div className='flex items-center justify-end gap-2'>
@@ -226,7 +230,7 @@ export function UserCreationForm({ onSubmit }) {
                         field.onChange(value);
                         handleRoleChange(value);
                       }}
-                      defaultValue={field.value}
+                      value={field.value} // `defaultValue` o'rniga `value` ishlatamiz
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -247,7 +251,7 @@ export function UserCreationForm({ onSubmit }) {
               />
               <Button
                 type='submit'
-                disabled={isSubmitting}
+                disabled={isSubmitting} // isSubmitting ni ishlatamiz
                 className='w-[150px] mt-[5px]'
               >
                 {isSubmitting ? (
@@ -353,7 +357,7 @@ export function UserCreationForm({ onSubmit }) {
                         onValueChange={(value) =>
                           field.onChange(Number.parseInt(value))
                         }
-                        value={field.value?.toString()}
+                        value={field.value?.toString() || ''} // Agar undefined bo'lsa, bo'sh string qaytarish
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -398,9 +402,8 @@ export function UserCreationForm({ onSubmit }) {
                               className='w-full justify-between'
                             >
                               {selectedGroups.length > 0
-                                ? `${selectedGroups.length} group${
-                                    selectedGroups.length > 1 ? 's' : ''
-                                  } selected`
+                                ? `${selectedGroups.length} group${selectedGroups.length > 1 ? 's' : ''
+                                } selected`
                                 : 'Select groups'}
                               <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                             </Button>

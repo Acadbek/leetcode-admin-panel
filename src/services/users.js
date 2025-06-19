@@ -17,4 +17,18 @@ export const usersService = {
     const res = await instance(USERS_ENDPOINTS.GET_USERS);
     return await res.json();
   },
+
+  createStaff: async (data) => {
+    const res = await instance.post(USERS_ENDPOINTS.CREATE_STAFF, {
+      json: data,
+    });
+    return await res.json();
+  },
+
+  createStudent: async (data) => {
+    const res = await instance.post(USERS_ENDPOINTS.CREATE_STUDENT, {
+      json: data,
+    });
+    return await res.json();
+  },
 };

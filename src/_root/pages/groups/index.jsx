@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { List, Search } from 'lucide-react';
+import { List, MoreHorizontal, Search } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -22,79 +22,12 @@ import { GroupCard } from './components/group-card';
 import { Link } from 'react-router-dom';
 import { useCreateGroups, useGetGroups } from '@/hooks/queries/useGroups';
 import { Skeleton } from '@/components/ui/skeleton';
-
-// Sample data for groups
-const groups = [
-  {
-    id: '1',
-    name: 'English Beginners A1',
-    description: 'Introduction to English language basics',
-    status: 'Active',
-    createdDate: '2023-09-15',
-    studentCount: 12,
-    // mainTeacher: { name: 'Sarah Johnson', role: 'Senior Teacher' },
-    // coTeachers: [
-    //   { name: 'Michael Brown', avatar: '/placeholder.svg?height=32&width=32' },
-    //   { name: 'Emily Davis', avatar: '/placeholder.svg?height=32&width=32' },
-    // ],
-    schedule: 'Mon/Wed/Fri - 14:00–16:00',
-    company: 'Global Learning Inc.',
-    level: 'Beginner',
-    progress: 35,
-  },
-  {
-    id: '2',
-    name: 'Business English B2',
-    description: 'Professional English for corporate environments',
-    status: 'Active',
-    createdDate: '2023-08-22',
-    studentCount: 8,
-    mainTeacher: { name: 'Robert Wilson', role: 'Business English Specialist' },
-    coTeachers: [
-      { name: 'Jennifer Lee', avatar: '/placeholder.svg?height=32&width=32' },
-    ],
-    schedule: 'Tue/Thu - 18:00–20:00',
-    company: 'Corporate Training Ltd.',
-    level: 'Intermediate',
-    progress: 68,
-  },
-  {
-    id: '3',
-    name: 'IELTS Preparation',
-    description: 'Intensive course for IELTS exam preparation',
-    status: 'Inactive',
-    createdDate: '2023-07-10',
-    studentCount: 15,
-    mainTeacher: { name: 'David Thompson', role: 'IELTS Examiner' },
-    coTeachers: [
-      { name: 'Lisa Chen', avatar: '/placeholder.svg?height=32&width=32' },
-      { name: 'Mark Taylor', avatar: '/placeholder.svg?height=32&width=32' },
-    ],
-    schedule: 'Mon/Wed/Sat - 10:00–12:30',
-    company: 'Academic Excellence',
-    level: 'Advanced',
-    progress: 92,
-  },
-  {
-    id: '4',
-    name: 'Conversation Club C1',
-    description: 'Practice speaking skills through discussions and debates',
-    status: 'Archived',
-    createdDate: '2023-05-05',
-    studentCount: 10,
-    mainTeacher: { name: 'Amanda Parker', role: 'Conversation Coach' },
-    coTeachers: [],
-    schedule: 'Fri - 17:00–19:00',
-    company: 'Language Partners',
-    level: 'Advanced',
-    progress: 100,
-  },
-];
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const GroupPage = () => {
   const { mutateAsync: createGroup } = useCreateGroups();
   const { data: groups2, isLoading, isError, error } = useGetGroups(1);
-  // const { data: groups, isLoading, isError, error } = useGetGroups();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
@@ -104,38 +37,43 @@ const GroupPage = () => {
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
-    console.log(groups2);
   }, []);
 
   // Filter groups based on search query and status filter
-  const filteredGroups = groups.filter((group) => {
-    const matchesSearch =
-      group.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      group.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      group.company.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredGroups = Array.isArray(groups2?.content)
+    ? groups2.content.filter((group) => {
+      const matchesSearch =
+        group.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        group.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        group.status?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === 'all' ||
-      group.status.toLowerCase() === statusFilter.toLowerCase();
+      const matchesStatus =
+        statusFilter === 'all' ||
+        group.status?.toLowerCase() === statusFilter.toLowerCase();
 
-    return matchesSearch && matchesStatus;
-  });
+      return matchesSearch && matchesStatus;
+    })
+    : [];
+
 
   // Sort groups based on sort option
   const sortedGroups = [...filteredGroups].sort((a, b) => {
     switch (sortBy) {
       case 'studentCount':
         return b.studentCount - a.studentCount;
-      case 'createdDate':
-        return (
-          new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
-        );
+      case 'createdDate': {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        if (isNaN(dateA) || isNaN(dateB)) return 0;
+        return dateB.getTime() - dateA.getTime();
+      }
       case 'progress':
-        return b.progress - a.progress;
+        return (b.progress || 0) - (a.progress || 0);
       default:
         return a.name.localeCompare(b.name);
     }
   });
+
 
   const handleAddStudents = (groupId) => {
     setSelectedGroupId(groupId);
@@ -144,6 +82,7 @@ const GroupPage = () => {
 
   return (
     <div className='container mx-auto px-4'>
+      {/* <pre>{JSON.stringify(groups2?.content, null, 2)}</pre> */}
       <div className='flex flex-col gap-6'>
         {/* Header section */}
         <div className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
@@ -264,19 +203,41 @@ const GroupPage = () => {
         <div>
           {viewType === 'card' ? (
             <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-              {sortedGroups.map((group) => (
-                <GroupCard
-                  key={group.id}
-                  group={group}
-                  onAddStudents={() => handleAddStudents(group.id)}
-                />
-              ))}
+              {sortedGroups.length > 0 ? (
+                sortedGroups.map((group) => (
+                  <GroupCard
+                    key={group.id}
+                    group={group}
+                    onAddStudents={() => handleAddStudents(group.id)}
+                  />
+                ))
+              ) : (
+                <>
+                  <SkeletonGroupCard />
+                  <SkeletonGroupCard />
+                  <SkeletonGroupCard />
+                  <SkeletonGroupCard />
+                  <SkeletonGroupCard />
+                </>
+              )}
             </div>
           ) : (
-            <GroupTable
-              groups={sortedGroups}
-              onAddStudents={handleAddStudents}
-            />
+            <>
+              {sortedGroups.length > 0 ? (
+                <GroupTable
+                  groups={sortedGroups}
+                  onAddStudents={handleAddStudents}
+                />
+              ) : (
+                <>
+                  <SkeletonTableRow />
+                  <SkeletonTableRow />
+                  <SkeletonTableRow />
+                  <SkeletonTableRow />
+                  <SkeletonTableRow />
+                </>
+              )}
+            </>
           )}
 
           {sortedGroups.length === 0 && (
@@ -349,5 +310,108 @@ const GroupPageSkeleton = () => {
     </div>
   );
 };
+
+function SkeletonGroupCard() {
+  return (
+    <Card className='overflow-hidden flex flex-col justify-between animate-pulse'>
+      <CardHeader className='pb-2'>
+        <div className='flex items-start justify-between'>
+          <div className='space-y-2 flex-1'>
+            <Skeleton className='h-5 w-3/4 rounded-md' />
+            <Skeleton className='h-4 w-5/6 rounded-md' />
+          </div>
+          <Skeleton className='h-5 w-14 rounded-md' />
+        </div>
+      </CardHeader>
+      <CardContent className='pb-2'>
+        <div className='space-y-4'>
+          <div className='grid grid-cols-2 gap-2 text-sm'>
+            <Skeleton className='h-4 w-full rounded-md' />
+            <Skeleton className='h-4 w-full rounded-md' />
+          </div>
+
+          <div className='space-y-2'>
+            <div className='flex flex-col gap-1'>
+              <Skeleton className='h-3 w-20 rounded-md' />
+              <Skeleton className='h-4 w-1/2 rounded-md' />
+              <Skeleton className='h-3 w-1/3 rounded-md' />
+            </div>
+
+            <div className='flex flex-col gap-1'>
+              <Skeleton className='h-3 w-20 rounded-md' />
+              <div className='flex gap-1'>
+                <Skeleton className='h-6 w-6 rounded-full' />
+                <Skeleton className='h-6 w-6 rounded-full' />
+                <Skeleton className='h-6 w-6 rounded-full' />
+              </div>
+            </div>
+
+            <div className='flex flex-col gap-1'>
+              <Skeleton className='h-3 w-20 rounded-md' />
+              <Skeleton className='h-4 w-2/3 rounded-md' />
+            </div>
+
+            <div className='flex flex-col gap-1'>
+              <Skeleton className='h-3 w-20 rounded-md' />
+              <Skeleton className='h-4 w-1/2 rounded-md' />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className='flex justify-between gap-2 pt-2'>
+        <Skeleton className='h-8 w-full rounded-md flex-1' />
+        <Skeleton className='h-8 w-full rounded-md flex-1' />
+        <Skeleton className='h-8 w-full rounded-md flex-1' />
+      </CardFooter>
+    </Card>
+  );
+}
+
+function SkeletonTableRow() {
+  return (
+    <TableRow>
+      <TableCell className='w-[250px]'>
+        <div className='space-y-1'>
+          <Skeleton className='h-4 w-3/4' />
+          <Skeleton className='h-3 w-2/3' />
+        </div>
+      </TableCell>
+      <TableCell className='hidden lg:table-cell'>
+        <Skeleton className='h-4 w-20' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='h-4 w-12' />
+      </TableCell>
+      <TableCell className='hidden xl:table-cell'>
+        <div className='flex flex-col gap-1'>
+          <Skeleton className='h-3 w-20' />
+          <div className='flex gap-1 pt-1'>
+            <Skeleton className='h-6 w-6 rounded-full' />
+            <Skeleton className='h-6 w-6 rounded-full' />
+            <Skeleton className='h-6 w-6 rounded-full' />
+          </div>
+        </div>
+      </TableCell>
+      <TableCell className='hidden lg:table-cell'>
+        <Skeleton className='h-4 w-16' />
+      </TableCell>
+      <TableCell className='hidden md:table-cell'>
+        <Skeleton className='h-4 w-24' />
+      </TableCell>
+      <TableCell className='text-right'>
+        <div className='flex justify-end gap-2'>
+          <div className='hidden sm:flex gap-1'>
+            <Skeleton className='h-8 w-8 rounded-md' />
+            <Skeleton className='h-8 w-8 rounded-md' />
+            <Skeleton className='h-8 w-8 rounded-md' />
+          </div>
+          <Button variant='ghost' size='icon' className='h-8 w-8 sm:hidden'>
+            <MoreHorizontal className='h-4 w-4' />
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
 
 export default GroupPage;

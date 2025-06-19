@@ -24,7 +24,11 @@ import {
 
 export function GroupTable({ groups, onAddStudents }) {
   const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'N/A';
+
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'short',
@@ -51,8 +55,8 @@ export function GroupTable({ groups, onAddStudents }) {
             <TableRow key={group.id} className='group'>
               <TableCell className='font-medium'>
                 <div>
-                  <div>{group.name}</div>
-                  <div className='text-xs text-muted-foreground'>
+                  <div title={group.name} className='line-clamp-1'>{group.name}</div>
+                  <div title={group.description} className='text-xs text-muted-foreground line-clamp-1'>
                     {group.description}
                   </div>
                 </div>
@@ -60,7 +64,7 @@ export function GroupTable({ groups, onAddStudents }) {
               <TableCell className='hidden lg:table-cell'>
                 <div className='flex items-center gap-1'>
                   <Calendar className='h-4 w-4 text-muted-foreground' />
-                  <span>{formatDate(group?.createdDate)}</span>
+                  <span>{formatDate(group?.createdAt)}</span>
                 </div>
               </TableCell>
               <TableCell>
@@ -71,9 +75,11 @@ export function GroupTable({ groups, onAddStudents }) {
               </TableCell>
               <TableCell className='hidden xl:table-cell'>
                 <div className='flex flex-col'>
-                  <span className='text-xs font-medium'>
-                    {group?.mainTeacher?.name}
-                  </span>
+                  {group?.mainTeacher?.name && (
+                    <span className='text-xs font-medium'>
+                      {group?.mainTeacher?.name}
+                    </span>
+                  )}
                   {group?.coTeachers?.length > 0 && (
                     <div className='flex -space-x-2 pt-1'>
                       {group?.coTeachers?.map((teacher, index) => (

@@ -21,3 +21,16 @@ export const useGetUsers = () => {
     queryFn: () => usersService.get(),
   });
 };
+
+export const useCreateStaff = () => {
+  return useMutation({
+    mutationFn: (data) => usersService.createStaff(data),
+  });
+};
+
+export const useCreateStudent = () => {
+  return useMutation({
+    mutationFn: (data) => usersService.createStudent(data),
+  });
+};
+
