@@ -1,6 +1,6 @@
 'use client';
 
-import { MoreHorizontal } from 'lucide-react';
+import { Check, CheckCheck, CheckCircle, MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,7 +19,7 @@ import {
 
 // import { labels } from "@/components/table copy/data"
 import { companySchema } from '@/components/company-table/schema';
-import { Link } from 'react-router-dom';
+import { statuses } from './data';
 
 export function DataTableRowActions({ row }) {
   const company = companySchema.parse({
@@ -27,6 +27,7 @@ export function DataTableRowActions({ row }) {
     id: String(row.original.id),
   });
 
+  console.log('company: ', company);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,13 +40,22 @@ export function DataTableRowActions({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-[160px]'>
-        <Link to={`/groups/create`} className='cursor-pointer'>
-          <DropdownMenuItem>Add Group</DropdownMenuItem>
-        </Link>
         <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Change status</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuRadioGroup>
+              {statuses.map((status) => (
+                <DropdownMenuRadioItem className='pl-2 flex items-center gap-2' key={status.value} value={status.value}>
+                  {company.status === status.value && <CheckCircle className='w-3 text-green-500' />}
+                  {status.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        {/* <DropdownMenuItem>Make a copy</DropdownMenuItem> */}
+        {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
         {/* <DropdownMenuSub>
           <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
@@ -58,11 +68,10 @@ export function DataTableRowActions({ row }) {
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
         </DropdownMenuSub> */}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        {/* <DropdownMenuItem>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

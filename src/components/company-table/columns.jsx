@@ -100,11 +100,10 @@ export const columns = [
     ),
     cell: ({ row }) => (
       <span className='max-w-[500px] truncate font-medium'>
-        {row.original.status === 'active' ? (
-          <Badge variant='default'>Active</Badge>
-        ) : (
-          <Badge variant='destructive'>Inactive</Badge>
-        )}
+        {row.original.status === 'ACTIVE' && <Badge className='bg-blue-500 text-white dark:bg-blue-600' variant='destructive'>Active</Badge>}
+        {row.original.status === 'INACTIVE' && <Badge variant='default'>Inactive</Badge>}
+        {row.original.status === 'ARCHIVED' && <Badge variant='default'>Archived</Badge>}
+        {row.original.status === 'DELETED' && <Badge variant='destructive'>Deleted</Badge>}
       </span>
     ),
   },

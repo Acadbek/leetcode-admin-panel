@@ -24,13 +24,16 @@ export const useGetUsers = () => {
 
 export const useCreateStaff = () => {
   return useMutation({
-    mutationFn: (data) => usersService.createStaff(data),
+    mutationFn: ({ data, companyId }) => {
+      usersService.createStaff(data, companyId)
+      console.log('company id', companyId);
+    },
   });
 };
 
 export const useCreateStudent = () => {
   return useMutation({
-    mutationFn: (data) => usersService.createStudent(data),
+    mutationFn: ({ data, companyId }) => usersService.createStudent(data, companyId),
   });
 };
 

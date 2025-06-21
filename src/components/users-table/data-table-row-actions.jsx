@@ -22,8 +22,6 @@ import { usersSchema } from '@/components/users-table/schema';
 import { Link } from 'react-router-dom';
 
 export function DataTableRowActions({ row }) {
-  console.log('users', row);
-
   const user = usersSchema.parse({
     ...row.original,
     id: String(row.original.id),

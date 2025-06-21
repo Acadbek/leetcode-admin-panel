@@ -149,7 +149,7 @@ export function UserCreationForm() { // onSubmit propini olib tashladik, chunki 
           sendToEmail: data.sendToEmail,
           groupId: data.groupId,
         };
-        await createStudent(studentData); // Student yaratish hook'ini chaqiramiz
+        await createStudent({ data: studentData, companyId: 1 }); // Student yaratish hook'ini chaqiramiz
         toast({
           title: 'Student created successfully',
           description: `Student ${data.firstName} ${data.lastName} has been created.`,
@@ -163,13 +163,13 @@ export function UserCreationForm() { // onSubmit propini olib tashladik, chunki 
           // groupIds Array.isArray(data.groupIds) bo'lishini zod tekshiradi.
           // Agar tanlanmagan bo'lsa, z.array().optional().nullable() ga ko'ra [] yoki null bo'lishi mumkin.
           // Agar null bo'lsa server tarafida qabul qilishga e'tibor bering.
-          groupIds: data.groupIds,
+          // groupIds: data.groupIds,
         };
-        await createStaff(staffData); // Staff yaratish hook'ini chaqiramiz
-        toast({
-          title: 'Staff created successfully',
-          description: `Staff member ${data.firstName} ${data.lastName} has been created.`,
-        });
+        await createStaff({ data: staffData, companyId: 1 }); // Staff yaratish hook'ini chaqiramiz
+        // toast({
+        //   title: 'Staff created successfully',
+        //   description: `Staff member ${data.firstName} ${data.lastName} has been created.`,
+        // });
       }
 
       // Muvaffaqiyatli bo'lgandan keyin formani qayta tiklash

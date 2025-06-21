@@ -9,4 +9,7 @@ export const companySchema = z.object({
   phone: z.string(),
   description: z.string(),
   address: z.string(),
+  status: z.string()
 })
+
+export const companyStatus = z.object({})
